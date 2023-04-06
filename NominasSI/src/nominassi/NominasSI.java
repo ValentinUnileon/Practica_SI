@@ -37,6 +37,7 @@ public class NominasSI {
     
     public static void main(String[] args) throws SQLException {
         
+        /*
         SessionFactory sf = HibernateUtil.getSessionFactory();
         Session session = sf.openSession();
         
@@ -55,4 +56,19 @@ public class NominasSI {
         
     }
     
+    */
+    
+    //Ejercicio 2
+        String rutaExcel = "resources/SistemasInformacionII.xlsx";
+        ExecelManager resolverEjercicio = new ExecelManager(localizacionExcel);
+
+         try {
+             resolverEjercicio.leerExcel();
+             ResolverEjercicio.generarEmail();
+            
+        } catch (Exception ex) {
+           System.out.println(ex.getCause());
+        
+        }
+
 }
