@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlador;
+package nominassi;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,7 +61,7 @@ public class ExecellDNI_Correo {
 
     public ExecellDNI_Correo(String localizacionExcel) throws IOException{
         this.localizacionExcel = localizacionExcel;
-        this.creamosListaLetras();
+        this.crearLetras();
         this.rellenaLista("Nombre");
         this.rellenaLista("Apellido1");
         this.rellenaLista("Apellido2");
@@ -73,7 +73,7 @@ public class ExecellDNI_Correo {
     
    
     
-    public void creamosListaLetras(){
+    public void crearLetras(){
         letras.add('T');
         letras.add('R');
         letras.add('W');
@@ -340,7 +340,7 @@ public class ExecellDNI_Correo {
         }
          
         try {
-            this.rellenamosXML(listaId,nombresErroneos,apellido1Erroneos,apellido2Erroneos,empresaErroneos,categoriaErroneos);
+            this.rellenarXML(listaId,nombresErroneos,apellido1Erroneos,apellido2Erroneos,empresaErroneos,categoriaErroneos);
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(ExecellDNI_Correo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (TransformerConfigurationException ex) {
@@ -348,100 +348,7 @@ public class ExecellDNI_Correo {
         }
     }
     
-    public void generarEmail() throws IOException{
-                
-        for(int i = 0;i < this.email.size();i++)
-        {
-            if(this.email.get(i) != null)
-            {
-                if(this.nombres.get(i).toString().equals("") == false)
-                {
-                    String celda = this.email.get(i).toString();
-                    StringBuffer cadena = new StringBuffer();
-                    cadena.append(this.nombres.get(i).toString().charAt(0));
-                    cadena.append(this.apellido1.get(i).toString().charAt(0));
-                    if(this.apellido2.get(i).toString().equals("") == false)
-                    {
-                        cadena.append(this.apellido2.get(i).toString().charAt(0));
-                    }
-                    cadena.append("@"+this.empresa.get(i)+".com");
-                    this.listaEmails.add(cadena.toString());
-                }else
-                {
-                    this.listaEmails.add("");
-                }
-            }
-        }
-        
-        ArrayList<String> auxiliar = new ArrayList<String>();
-        
-        for(int i = 0;i < this.listaEmails.size();i++)
-        {
-            auxiliar.add(this.listaEmails.get(i));
-        }
-        
-        ArrayList<String> finalList = new ArrayList<String>();
-        
-        for(int i = 0;i < this.listaEmails.size();i++)
-        {
-            if(this.listaEmails.get(i).equals("") == false)
-            {
-            
-            StringBuffer cadena = new StringBuffer();
-            int contador = 0;
-            if(this.apellido2.get(i).toString().equals("") == false)
-            {
-                cadena.append(this.listaEmails.get(i).substring(0, 3));
-            }else if(this.apellido2.get(i).toString().equals("") == true)
-            {
-                cadena.append(this.listaEmails.get(i).substring(0, 2));
-            }
-            
-            int index = 0;
-            for(int j = 0;j < auxiliar.size();j++)
-            {
-                if(this.listaEmails.get(i).equals(auxiliar.get(j)) == true)
-                {
-                    contador++;
-                    index = j;
-                }
-            }
-            if(contador == 1)
-            {
-                cadena.append("00");
-            }else if(contador > 1)
-            {
-                if(i == index)
-                {
-                    cadena.append("0");
-                    cadena.append(contador-1);
-                }else if(i < index)
-                {
-                    cadena.append("00");
-                }
-            }
-            
-            if(this.apellido2.get(i).toString().equals("") == false)
-            {
-                cadena.append(this.listaEmails.get(i).substring(3));
-            }else if(this.apellido2.get(i).toString().equals("") == true)
-            {
-                cadena.append(this.listaEmails.get(i).substring(2));
-            }
-            finalList.add(cadena.toString());
-            
-            }else
-            {
-                finalList.add("");
-            }
-        }
-        
-        this.listaEmails = finalList;
-        
-        this.modificaExcelEmail();
-    }
-    
-    public void rellenamosXML(ArrayList<Integer> idList,List<String> nombresErroneos,List<String> apellido1Erroneos,List<String> apellido2Erroneos,List<String> empresasErroneos,List<String> categoriasErroneos) throws ParserConfigurationException, FileNotFoundException, IOException, TransformerConfigurationException, TransformerException{
+    public void rellenarXML(ArrayList<Integer> idList,List<String> nombresErroneos,List<String> apellido1Erroneos,List<String> apellido2Erroneos,List<String> empresasErroneos,List<String> categoriasErroneos) throws ParserConfigurationException, FileNotFoundException, IOException, TransformerConfigurationException, TransformerException{
           // Archivo XML
           
             DocumentBuilderFactory dbf   = DocumentBuilderFactory.newInstance();
