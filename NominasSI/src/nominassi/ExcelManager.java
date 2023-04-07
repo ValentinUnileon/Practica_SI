@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package nominassi;
 
 import java.io.File;
@@ -25,8 +20,14 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFFactory;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -39,96 +40,281 @@ import org.w3c.dom.Text;
  *
  * @author David
  */
-public class ExecellDNI_Correo {
-    
-    private List<Character> letras = new ArrayList<Character>();
-    
-    private ArrayList<String> listaEmails = new ArrayList<String>();
-    
-    private List nombres = new ArrayList();
-    
-    private List apellido1 = new ArrayList();
-    
-    private List apellido2 = new ArrayList();
-    
-    private List empresa = new ArrayList();
-    
-    private List categoria = new ArrayList();
-    
-    private List email = new ArrayList();
+public class ExcelManager {
 
-    private String localizacionExcel;
 
-    public ExecellDNI_Correo(String localizacionExcel) throws IOException{
-        this.localizacionExcel = localizacionExcel;
-        this.crearLetras();
-        this.rellenaLista("Nombre");
-        this.rellenaLista("Apellido1");
-        this.rellenaLista("Apellido2");
-        this.rellenaLista("Nombre empresa");
-        this.rellenaLista("Categoria");
-        this.rellenaLista("Email");
+    
+  
+    public List<String> obtenerColumnasDatos(String localizacionExcel, String nombreColumna, int numHoja) throws FileNotFoundException, IOException {
+        int contadorFilas = 1;
+        int tope = 0; 
+        int bloqueo = 0; 
+        int filaActual = 0; 
+        int celdaActual = 0;
 
+        File archivoExcel = new File(localizacionExcel);                //ponerTrycatch
+        InputStream flujoEntrada = new FileInputStream(archivoExcel);
+        XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
+        XSSFSheet hojaExcel = libroExcel.getSheetAt(numHoja); 
+
+        Iterator<Row> iteradorFilas = hojaExcel.iterator(); 
+        List<String> listaResultado = new ArrayList<>();
+
+
+
+        while(iteradorFilas.hasNext()) 
+        {
+            XSSFRow fila = (XSSFRow) iteradorFilas.next();     
+            Iterator<Cell> iteradorCeldas = fila.cellIterator();          
+
+            while(iteradorCeldas.hasNext())
+            {
+                XSSFCell celda = (XSSFCell) iteradorCeldas.next();     
+                if(celda.toString().equals(nombreColumna) && bloqueo == 0)
+                {
+                    tope = contadorFilas;
+                    bloqueo = 1;
+                }                                            
+                if(bloqueo == 1 && filaActual == 1)
+                {
+                    if(fila.getCell(tope-1) != null && celdaActual == 0)
+                    {
+                        listaResultado.add(fila.getCell(tope-1).toString());
+                        celdaActual = 1;
+                    }else if(fila.getCell(tope-1) == null && celdaActual == 0)
+                    {
+                        listaResultado.add("");
+                        celdaActual = 1;
+                    }
+                }
+                contadorFilas++;
+            }
+            filaActual = 1;
+            celdaActual = 0;
+        }
+
+        return listaResultado;
     }
+    
+    
+    
+        public void modificarDatos(String localizacionExcel, int numHoja, String antiguaCelda, String nuevaCelda) throws FileNotFoundException, IOException {
+
+
+            File archivoExcel = new File(localizacionExcel);                //ponerTrycatch
+            InputStream flujoEntrada = new FileInputStream(archivoExcel);
+            XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
+            XSSFSheet hojaExcel = libroExcel.getSheetAt(numHoja); 
+
+            Iterator<Row> iteradorFilas = hojaExcel.iterator(); 
+            List<String> listaResultado = new ArrayList<>();
+
+
+
+            while(iteradorFilas.hasNext()) 
+            {
+                XSSFRow fila = (XSSFRow) iteradorFilas.next();     
+                Iterator<Cell> iteradorCeldas = fila.cellIterator();      
+                
+                System.out.println("la fila actual"+iteradorFilas);
+
+                while(iteradorCeldas.hasNext())
+                {
+                    XSSFCell celda = (XSSFCell) iteradorCeldas.next();  
+                    //System.out.println("la celda es: "+ celda.toString());
+                    if(celda.toString().equals(antiguaCelda) )                   
+                    {
+                        celda.setCellValue(nuevaCelda);
+                        System.out.println("la celda es: "+ celda.toString());
+
+                    }                                            
+
+
+                }
+
+            }
+        flujoEntrada.close();
+        
+        FileOutputStream output_file = new FileOutputStream(new File(localizacionExcel));
+        
+        libroExcel.write(output_file);
+        
+        output_file.close(); 
+        libroExcel.close();
+
+
+
+
+        }
+        
+        
+    //solo encuentra la primera aparicion    
+    public List<String> obtenerFila(String localizacionExcel, String elemFila) throws FileNotFoundException, IOException{    //devuelve una lista con los elementos de una fila. La fila sera en la que se encuentre elemFila
+    
+        File archivoExcel = new File(localizacionExcel);                //ponerTrycatch
+        InputStream flujoEntrada = new FileInputStream(archivoExcel);
+        XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
+        XSSFSheet hojaExcel = libroExcel.getSheetAt(0); 
+
+        Iterator<Row> iteradorFilas = hojaExcel.iterator(); 
+        List<String> listaResultado = new ArrayList<>();
+        boolean encontrado=false;
+
+
+
+        while(iteradorFilas.hasNext() && encontrado==false) 
+        {
+            XSSFRow fila = (XSSFRow) iteradorFilas.next(); 
+            //System.out.println("NumFIla esss: "+fila.getRowNum());          //PARA OBTENER EL NUMERO DE LA FILA DEL EXCEL
+            Iterator<Cell> iteradorCeldas = fila.cellIterator();          
+
+            while(iteradorCeldas.hasNext())
+            {
+                XSSFCell celda = (XSSFCell) iteradorCeldas.next();
+
+                
+                if(celda.toString().equals(elemFila)) {
+                    encontrado=true;
+                    Iterator<Cell> iteradorCeldasFila = fila.cellIterator();        //creamos nuevo iterador para la fila
+                    while(iteradorCeldasFila.hasNext()) {
+                        XSSFCell celdaFila = (XSSFCell) iteradorCeldasFila.next();
+                        listaResultado.add(celdaFila.toString());
+                    }
+                }
+            }
+
+        }
+
+      
+        return listaResultado;
+    }
+        
+    
+        
+    public List<String> procesarDNI(String localizacionExcel) throws FileNotFoundException, IOException {
+        int contadorFilas = 1;
+        int tope = 0; 
+        int bloqueo = 0; 
+        int filaActual = 0; 
+        int celdaActual = 0;
+        
+        List<String> listaDNI = this.obtenerColumnasDatos(localizacionExcel, "NIF/NIE", 0);
+        
+        for(int i=0; i<listaDNI.size(); i++){       //hacer metodo para encontrar elems con mas de una aparicion (repetidos)
+            
+            if(!listaDNI.get(i).equals("")){
+                
+                //comprobamos que no este repetido
+                //comprobamos que sea valido con nuestro metodo
+                
+                
+                
+            }
+        }
+        
+
+        File archivoExcel = new File(localizacionExcel);                //ponerTrycatch
+        InputStream flujoEntrada = new FileInputStream(archivoExcel);
+        XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
+        XSSFSheet hojaExcel = libroExcel.getSheetAt(0); 
+
+        Iterator<Row> iteradorFilas = hojaExcel.iterator(); 
+        List<String> listaResultado = new ArrayList<>();
+        
+        int numFilaEspecifica;
+
+
+
+        while(iteradorFilas.hasNext()) 
+        {
+            XSSFRow fila = (XSSFRow) iteradorFilas.next();     
+            Iterator<Cell> iteradorCeldas = fila.cellIterator();          
+
+            while(iteradorCeldas.hasNext())
+            {
+                XSSFCell celda = (XSSFCell) iteradorCeldas.next();     
+                if(celda.toString().equals(nombreColumna) && bloqueo == 0)
+                {
+                    tope = contadorFilas;
+                    bloqueo = 1;
+                }                                            
+                if(bloqueo == 1 && filaActual == 1)
+                {
+                    if(fila.getCell(tope-1) != null && celdaActual == 0)
+                    {
+                        listaResultado.add(fila.getCell(tope-1).toString());
+                        celdaActual = 1;
+                    }else if(fila.getCell(tope-1) == null && celdaActual == 0)
+                    {
+                        listaResultado.add("");
+                        celdaActual = 1;
+                    }
+                }
+                contadorFilas++;
+            }
+            filaActual = 1;
+            celdaActual = 0;
+        }
+
+        return listaResultado;
+    }        
+
+
+    
+    
+    
+    
+    
+    
+    
+
+
+
+    //HASTA AQUI LO LEGAL CUIDADO TETE
+    
+    
+    
     
    
     
-    public void crearLetras(){
-        letras.add('T');
-        letras.add('R');
-        letras.add('W');
-        letras.add('A');
-        letras.add('G');
-        letras.add('M');
-        letras.add('Y');
-        letras.add('F');
-        letras.add('P');
-        letras.add('D');
-        letras.add('X');
-        letras.add('B');
-        letras.add('N');
-        letras.add('J');
-        letras.add('Z');
-        letras.add('S');
-        letras.add('Q');
-        letras.add('V');
-        letras.add('H');
-        letras.add('L');
-        letras.add('C');
-        letras.add('K');
-        letras.add('E');    
-    }
+
     
-      public void rellenaLista(String campo) throws FileNotFoundException, IOException {
+      public void extraerDatos(String campo) throws FileNotFoundException, IOException {
+                
                 File f = new File(localizacionExcel);
-                InputStream inp = new FileInputStream(f);
-		XSSFWorkbook workBook = new XSSFWorkbook(inp);
-		XSSFSheet hs =  workBook.getSheetAt(2);
+
+              
+                InputStream inp = new FileInputStream(f);      //poner try catch
+
+                
+		XSSFWorkbook workBook = new XSSFWorkbook(inp);   //representa libro excel en formato XLSX
+                
+		XSSFSheet hoja =  workBook.getSheetAt(0);        //escogemos pagina 1 del excel
 		
-		Iterator rowIter = hs.rowIterator();
+		Iterator iteradorHoja = hoja.rowIterator();                //creamos iterador para fila de una hoja
 		List cellTemp = new ArrayList();
                 
                 int contador = 1, tope = 0, bloqueo = 0, k = 0, l = 0;
                 
-		while(rowIter.hasNext()) 
+		while(iteradorHoja.hasNext()) 
 		{
-			XSSFRow hr = (XSSFRow) rowIter.next();
-			Iterator iterator = hr.cellIterator();
-				while(iterator.hasNext())
+			XSSFRow fila = (XSSFRow) iteradorHoja.next();     //representa una fila de una hoja
+			Iterator iteratorFila = fila.cellIterator();          //iterador para celdas de una fila de la hoja
+				while(iteratorFila.hasNext())
 				{
-					XSSFCell hcel = (XSSFCell) iterator.next();
-                                        if(hcel.toString().equals(campo) && bloqueo == 0)
+					XSSFCell celda = (XSSFCell) iteratorFila.next();     //representa la celda actual
+                                        if(celda.toString().equals(campo) && bloqueo == 0)
                                         {
                                             tope = contador;
                                             bloqueo = 1;
-                                        }
+                                        }                                             //si no coincide con el campo indicado se pasa a otra fila
                                         if(bloqueo == 1 && k == 1)
                                         {
-                                            if(hr.getCell(tope-1) != null && l == 0)
+                                            if(fila.getCell(tope-1) != null && l == 0)
                                             {
-                                                cellTemp.add(hr.getCell(tope-1).toString());
+                                                cellTemp.add(fila.getCell(tope-1).toString());
                                                 l = 1;
-                                            }else if(hr.getCell(tope-1) == null && l == 0)
+                                            }else if(fila.getCell(tope-1) == null && l == 0)
                                             {
                                                 cellTemp.add("");
                                                 l = 1;
@@ -139,6 +325,15 @@ public class ExecellDNI_Correo {
                         k = 1;
                         l = 0;
 		}
+            
+            for (Object element : cellTemp) {
+                System.out.println(element.toString());
+                
+                 
+            }
+
+                
+          /*
           if(campo.equals("Nombre"))
           {
                 this.nombres = cellTemp;
@@ -157,7 +352,11 @@ public class ExecellDNI_Correo {
           }else if(campo.equals("Email"))
           {
               this.email = cellTemp;
-          }
+          
+        */
+          
+          
+          
       }
     
     public void leerExcel() throws FileNotFoundException, IOException, ParserConfigurationException, TransformerException {
@@ -342,9 +541,9 @@ public class ExecellDNI_Correo {
         try {
             this.rellenarXML(listaId,nombresErroneos,apellido1Erroneos,apellido2Erroneos,empresaErroneos,categoriaErroneos);
         } catch (ParserConfigurationException ex) {
-            Logger.getLogger(ExecellDNI_Correo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (TransformerConfigurationException ex) {
-            Logger.getLogger(ExecellDNI_Correo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExcelManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

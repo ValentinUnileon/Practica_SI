@@ -7,12 +7,16 @@ package nominassi;
 
 import controlador.Nomina;
 import controlador.Trabajador;
+import java.io.IOException;
+
+import nominassi.ExcelManager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+//import org.hibernate.Session;
+//import org.hibernate.SessionFactory;
 import util.HibernateUtil;
 
 /**
@@ -35,7 +39,7 @@ public class NominasSI {
     static Connection conexion = null;
     
     
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
         
         /*
         SessionFactory sf = HibernateUtil.getSessionFactory();
@@ -59,16 +63,29 @@ public class NominasSI {
     */
     
     //Ejercicio 2
-        String rutaExcel = "resources/SistemasInformacionII.xlsx";
-        ExecelManager resolverEjercicio = new ExecelManager(localizacionExcel);
+    
+        String rutaExcel = "C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+        
+        ExcelManager resolverEjercicio = new ExcelManager();
+        
 
          try {
-             resolverEjercicio.leerExcel();
-             ResolverEjercicio.generarEmail();
+             
+             List<String> listaNombres = resolverEjercicio.obtenerFila(rutaExcel, "09548150E"); //tener en cuenta que las hojas comienzan en 0
+             for (String celda : listaNombres) {
+                    System.out.println(celda);
+              }
+             
+             //resolverEjercicio.modificarDatos(rutaExcel, 1, "Cocinero", "lcoo");
+
+             
+             
+            
             
         } catch (Exception ex) {
            System.out.println(ex.getCause());
         
         }
+    }
 
 }
