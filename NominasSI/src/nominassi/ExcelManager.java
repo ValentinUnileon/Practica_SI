@@ -7,8 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -190,73 +192,51 @@ public class ExcelManager {
     }
         
     
+    
+    
+    public Map<String, Integer> contarRepeticiones(List<String> lista){
+       
+        Map<String, Integer> map = new HashMap<>();
+        for (String elemento : lista) {
+            if (map.containsKey(elemento)) {
+                map.put(elemento, map.get(elemento) + 1);
+            } else {
+                map.put(elemento, 1);
+            }
+        }
+       
+        
+        return map;
+    }
         
     public List<String> procesarDNI(String localizacionExcel) throws FileNotFoundException, IOException {
-        int contadorFilas = 1;
-        int tope = 0; 
-        int bloqueo = 0; 
-        int filaActual = 0; 
-        int celdaActual = 0;
-        
+
         List<String> listaDNI = this.obtenerColumnasDatos(localizacionExcel, "NIF/NIE", 0);
+        Map<String, Integer> map = contarRepeticiones(listaDNI);
+        List<String> listaDNI_Repetidos = null;
         
         for(int i=0; i<listaDNI.size(); i++){       //hacer metodo para encontrar elems con mas de una aparicion (repetidos)
             
             if(!listaDNI.get(i).equals("")){
                 
-                //comprobamos que no este repetido
-                //comprobamos que sea valido con nuestro metodo
+                System.out.println("el elemento "+listaDNI.get(i)+" se repite estas veces: "+map.get(listaDNI.get(i)) );
                 
-                
-                
-            }
-        }
-        
-
-        File archivoExcel = new File(localizacionExcel);                //ponerTrycatch
-        InputStream flujoEntrada = new FileInputStream(archivoExcel);
-        XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
-        XSSFSheet hojaExcel = libroExcel.getSheetAt(0); 
-
-        Iterator<Row> iteradorFilas = hojaExcel.iterator(); 
-        List<String> listaResultado = new ArrayList<>();
-        
-        int numFilaEspecifica;
-
-
-
-        while(iteradorFilas.hasNext()) 
-        {
-            XSSFRow fila = (XSSFRow) iteradorFilas.next();     
-            Iterator<Cell> iteradorCeldas = fila.cellIterator();          
-
-            while(iteradorCeldas.hasNext())
-            {
-                XSSFCell celda = (XSSFCell) iteradorCeldas.next();     
-                if(celda.toString().equals(nombreColumna) && bloqueo == 0)
-                {
-                    tope = contadorFilas;
-                    bloqueo = 1;
-                }                                            
-                if(bloqueo == 1 && filaActual == 1)
-                {
-                    if(fila.getCell(tope-1) != null && celdaActual == 0)
-                    {
-                        listaResultado.add(fila.getCell(tope-1).toString());
-                        celdaActual = 1;
-                    }else if(fila.getCell(tope-1) == null && celdaActual == 0)
-                    {
-                        listaResultado.add("");
-                        celdaActual = 1;
-                    }
+                if(map.get(listaDNI.get(i))>1 && !listaDNI_Repetidos.contains(listaDNI.get(i))){
+                    //introducir todos los trabajdores repetido al XML de errores menos el primero********
+                    //hacer metodo  obtenerFila(String localizacionExcel, String elemFila, int numRepeticion) para obtener los datos de los trabajadores
+                    listaDNI_Repetidos.add(listaDNI.get(i));
                 }
-                contadorFilas++;
+                
+                // if EsIncorrecto -> se puede solucionar - no se puede solucionar
+                
+                
+                
             }
-            filaActual = 1;
-            celdaActual = 0;
         }
+        return null;
+        
 
-        return listaResultado;
+        
     }        
 
 

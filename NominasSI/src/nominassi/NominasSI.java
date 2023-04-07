@@ -70,13 +70,14 @@ public class NominasSI {
         
 
          try {
-             
+             /*
              List<String> listaNombres = resolverEjercicio.obtenerFila(rutaExcel, "09548150E"); //tener en cuenta que las hojas comienzan en 0
              for (String celda : listaNombres) {
                     System.out.println(celda);
-              }
+              } */
              
              //resolverEjercicio.modificarDatos(rutaExcel, 1, "Cocinero", "lcoo");
+             resolverEjercicio.procesarDNI(rutaExcel);
 
              
              
