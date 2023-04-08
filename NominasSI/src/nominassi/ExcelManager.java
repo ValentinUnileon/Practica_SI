@@ -22,6 +22,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import jdk.internal.org.xml.sax.SAXException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -46,6 +47,7 @@ public class ExcelManager {
 
 
     private static List<Character> letras = new ArrayList<Character>();
+
   
     public List<String> obtenerColumnasDatos(String localizacionExcel, String nombreColumna, int numHoja) throws FileNotFoundException, IOException {
         int contadorFilas = 1;
@@ -119,7 +121,7 @@ public class ExcelManager {
                 XSSFRow fila = (XSSFRow) iteradorFilas.next();     
                 Iterator<Cell> iteradorCeldas = fila.cellIterator();      
                 
-                System.out.println("la fila actual"+iteradorFilas);
+                //System.out.println("la fila actual"+iteradorFilas);
 
                 while(iteradorCeldas.hasNext())
                 {
@@ -137,13 +139,24 @@ public class ExcelManager {
 
             }
         flujoEntrada.close();
+         System.out.println("la celda es: ");
         
-        FileOutputStream output_file = new FileOutputStream(new File(localizacionExcel));
-        
-        libroExcel.write(output_file);
+         try{
+             FileOutputStream output_file = new FileOutputStream(new File(localizacionExcel));
+                     libroExcel.write(output_file);
         
         output_file.close(); 
+        
         libroExcel.close();
+         } catch (Exception e) {
+    // Manejo de la excepción
+            e.printStackTrace();
+         }
+        
+         
+       
+
+        
 
 
 
@@ -227,18 +240,41 @@ public class ExcelManager {
             
             if(!listaDNI.get(i).equals("")){
                 
-                System.out.println("el elemento "+listaDNI.get(i)+" se repite estas veces: "+map.get(listaDNI.get(i)) );
+                //System.out.println("el elemento "+listaDNI.get(i)+" se repite estas veces: "+map.get(listaDNI.get(i)) );
                 
               
                 
                 if(map.get(listaDNI.get(i))>1 && !listaDNI_Repetidos.contains(listaDNI.get(i))){  //comprobar que el dni se repite y que no se encuentra en la lista de "ya añadidos"
                     //introducir todos los trabajdores repetido al XML de errores menos el primero********
                     //hacer metodo  obtenerFilaRepeticiones(String localizacionExcel, String elemFila, int numRepeticion) para obtener los datos de los trabajadores
-                    System.out.println("Añadidos a XML ERRORES: "+ listaDNI.get(i));
+                    //System.out.println("Añadidos a XML ERRORES: "+ listaDNI.get(i));
+                    
                     listaDNI_Repetidos.add(listaDNI.get(i));
                 }
                 
                 //IGUAL HAY QUE METER ESTO DE DEBAJO EN ALGÚN ELSE, POR LO DE LOS REPETIDOS
+                
+                int comprobacion=esValidoDNI(listaDNI.get(i));
+                
+                System.out.println(comprobacion);
+                
+                switch(comprobacion){
+                    case 1:
+                        //System.out.println("valido: "+listaDNI.get(i));
+                        break;
+                    case 2:
+                        //el error se puede subsanar -> LA LETRA ESTA MAL
+                        String dniArreglado = arreglarDNI(listaDNI.get(i));  //DNI CON LA LETRA CORRECTA
+                        this.modificarDatos(localizacionExcel, 0, listaDNI.get(i), dniArreglado);
+                        System.out.println("El dni: "+listaDNI.get(i)+" ha sido reemplazado por "+dniArreglado);
+                        break;
+                    case 3:
+                        //el error no es subsanable -> ESTÁ MAL ESTRUCTURADO
+                        break;
+                               
+                }
+                
+                /*
                 
                 if (esValidoDNI(listaDNI.get(i)) == 1) {
                     //castañas
@@ -248,15 +284,14 @@ public class ExcelManager {
                     //hay un error en el dni
 
                     if (esValidoDNI(listaDNI.get(i)) == 2) {
-                        //el error se puede subsanar -> LA LETRA ESTA MAL
-                        String dniArreglado = arreglarDNI(listaDNI.get(i));  //DNI CON LA LETRA CORRECTA
+                        
                     
                     } else if(esValidoDNI(listaDNI.get(i)) == 3) {
 
                         //el error no es subsanable -> ESTÁ MAL ESTRUCTURADO
                     }
                 }
-                
+                */
             }
         }
        
@@ -353,6 +388,73 @@ public class ExcelManager {
         
         return nuevoDNI;
     }
+    
+    
+    
+    
+    public void agregarTrabajadoresAXML() throws ParserConfigurationException, IOException, SAXException, TransformerException, org.xml.sax.SAXException {
+
+        try{
+        // cargamos el archivo XML existente en un objeto Document
+        File archivoXML = new File("C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/errores.xml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(archivoXML);
+
+        // obtenemos la raíz del documento existente
+        Element eRaiz = doc.getDocumentElement();
+
+        // creamos un nuevo elemento para cada trabajador
+        for (int i = 0; i < 1; i++) {
+
+            Element xmlTrabajador = doc.createElement("Trabajador");
+
+            // creamos el atributo "id" para el trabajador
+            Attr atributoID = doc.createAttribute("id");
+            atributoID.setValue("1");
+            xmlTrabajador.setAttributeNode(atributoID);
+
+            // creamos los elementos secundarios para el trabajador y les asignamos el valor correspondiente
+            Element nombre = doc.createElement("Nombre");
+            nombre.appendChild(doc.createTextNode("d"));
+            xmlTrabajador.appendChild(nombre);
+            
+            
+
+            Element apellido1 = doc.createElement("PrimerApellido");
+            apellido1.appendChild(doc.createTextNode("ds"));
+            xmlTrabajador.appendChild(apellido1);
+
+            Element apellido2 = doc.createElement("SegundoApellido");
+            apellido2.appendChild(doc.createTextNode("dfs"));
+            xmlTrabajador.appendChild(apellido2);
+            
+
+            Element empresa = doc.createElement("Empresa");
+            empresa.appendChild(doc.createTextNode("s"));
+            xmlTrabajador.appendChild(empresa);
+
+            Element categoria = doc.createElement("Categoria");
+            categoria.appendChild(doc.createTextNode("asdf"));
+            xmlTrabajador.appendChild(categoria);
+
+            // añadimos el elemento del trabajador a la raíz del documento
+            eRaiz.appendChild(xmlTrabajador);
+        }
+
+        // actualizamos el archivo XML
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(archivoXML);
+        transformer.transform(source, result);
+        
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
     
 
 
