@@ -238,6 +238,7 @@ public class ExcelManager {
                 
                 if (esValidoDNI(listaDNI.get(i))) {
                     //castañas
+                    System.out.println("valido: "+listaDNI.get(i));
                 } else {
 
                     //aqui se llega si lo que falla es la letra, y habria que poner la letra buena + ponerlo en el excel
