@@ -209,11 +209,11 @@ public class ExcelManager {
         return map;
     }
         
-    public List<String> procesarDNI(String localizacionExcel) throws FileNotFoundException, IOException {
+    public void procesarDNI(String localizacionExcel) throws FileNotFoundException, IOException {
 
         List<String> listaDNI = this.obtenerColumnasDatos(localizacionExcel, "NIF/NIE", 0);
         Map<String, Integer> map = contarRepeticiones(listaDNI);
-        List<String> listaDNI_Repetidos = null;
+        List<String> listaDNI_Repetidos = new ArrayList<>();
         
         for(int i=0; i<listaDNI.size(); i++){       //hacer metodo para encontrar elems con mas de una aparicion (repetidos)
             
@@ -221,19 +221,22 @@ public class ExcelManager {
                 
                 System.out.println("el elemento "+listaDNI.get(i)+" se repite estas veces: "+map.get(listaDNI.get(i)) );
                 
-                if(map.get(listaDNI.get(i))>1 && !listaDNI_Repetidos.contains(listaDNI.get(i))){
+              
+                
+                if(map.get(listaDNI.get(i))>1 && !listaDNI_Repetidos.contains(listaDNI.get(i))){  //comprobar que el dni se repite y que no se encuentra en la lista de "ya añadidos"
                     //introducir todos los trabajdores repetido al XML de errores menos el primero********
-                    //hacer metodo  obtenerFila(String localizacionExcel, String elemFila, int numRepeticion) para obtener los datos de los trabajadores
+                    //hacer metodo  obtenerFilaRepeticiones(String localizacionExcel, String elemFila, int numRepeticion) para obtener los datos de los trabajadores
+                    System.out.println("Añadidos a XML ERRORES: "+ listaDNI.get(i));
                     listaDNI_Repetidos.add(listaDNI.get(i));
                 }
                 
-                // if EsIncorrecto -> se puede solucionar - no se puede solucionar
+                // if EsIncorrecto -> (se puede solucionar) - (no se puede solucionar)
                 
                 
                 
             }
         }
-        return null;
+       
         
 
         
