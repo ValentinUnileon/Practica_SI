@@ -212,8 +212,12 @@ public class ExcelManager {
         
     public void procesarDNI(String localizacionExcel) throws FileNotFoundException, IOException {
         
-        // LLAMADA AL METODO QUE RELLENA LA LISTA DE LETRAS DE LOS DNI
-        rellenarListaLetras();
+        // SE RELLENA LA LISTA QUE CONTIENE LAS LETRAS DE LOS DNI
+        char[] listaAux = new char[]{'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H', 'L', 'C', 'K', 'E'};
+        
+        for(int i=0; i<23; i++) {
+            letras.add(listaAux[i]);
+        }
 
         List<String> listaDNI = this.obtenerColumnasDatos(localizacionExcel, "NIF/NIE", 0);
         Map<String, Integer> map = contarRepeticiones(listaDNI);
@@ -234,14 +238,23 @@ public class ExcelManager {
                     listaDNI_Repetidos.add(listaDNI.get(i));
                 }
                 
-                // if EsIncorrecto -> (se puede solucionar) - (no se puede solucionar)
+                //IGUAL HAY QUE METER ESTO DE DEBAJO EN ALGÚN ELSE, POR LO DE LOS REPETIDOS
                 
-                if (esValidoDNI(listaDNI.get(i))) {
+                if (esValidoDNI(listaDNI.get(i)) == 1) {
                     //castañas
                     System.out.println("valido: "+listaDNI.get(i));
                 } else {
 
-                    //aqui se llega si lo que falla es la letra, y habria que poner la letra buena + ponerlo en el excel
+                    //hay un error en el dni
+
+                    if (esValidoDNI(listaDNI.get(i)) == 2) {
+                        //el error se puede subsanar -> LA LETRA ESTA MAL
+                        String dniArreglado = arreglarDNI(listaDNI.get(i));  //DNI CON LA LETRA CORRECTA
+                    
+                    } else if(esValidoDNI(listaDNI.get(i)) == 3) {
+
+                        //el error no es subsanable -> ESTÁ MAL ESTRUCTURADO
+                    }
                 }
                 
             }
@@ -252,58 +265,94 @@ public class ExcelManager {
         
     }        
     
-    public static boolean esValidoDNI(String dni) {
-
-        boolean esValido = false;
+    public static int esValidoDNI(String dni) {
+        
+        // RETURN:
+        // 1 - VALIDO
+        // 2 - ERROR SUBSANABLE
+        // 3 - ERROR NO SUBSANABLE
+    
+        int esValido = 3;
         char letra;
         int cantidad;
 
-        if (dni.length() == 9) {
-            
-            letra = dni.charAt(8);
-            cantidad = Integer.parseInt(dni.substring(0, dni.length()-1));
-            
-            if (letra == obtenerLetraCorrectaDNI(cantidad)) {
+        if (dni.length() == 9) {   //el dni tiene longitud 9
+                  
+            if (estaBienEstructurado(dni)) {
                 
-                esValido = true;
-            }
+                letra = dni.charAt(8);
+                cantidad = Integer.parseInt(dni.substring(0, dni.length()-1));
+
+                if (letra == obtenerLetraCorrectaDNI(cantidad)) {  //si la letra es la correcta, el dni es valido
+
+                    esValido = 1;
+                } else {    // si la letra no es la correcta, el dni es erroneo pero subsanable
+                
+                    esValido = 2;
+                }
+            } 
         }
+
         return esValido;
     }
 
-    public static void rellenarListaLetras(){
-           letras.add('T');
-           letras.add('R');
-           letras.add('W');
-           letras.add('A');
-           letras.add('G');
-           letras.add('M');
-           letras.add('Y');
-           letras.add('F');
-           letras.add('P');
-           letras.add('D');
-           letras.add('X');
-           letras.add('B');
-           letras.add('N');
-           letras.add('J');
-           letras.add('Z');
-           letras.add('S');
-           letras.add('Q');
-           letras.add('V');
-           letras.add('H');
-           letras.add('L');
-           letras.add('C');
-           letras.add('K');
-           letras.add('E');    
-       }
+    public static boolean estaBienEstructurado(String dni) {
+    
+        boolean estaBien = true;
+        boolean encontrado = false;
+        char letra;
 
-    public static char obtenerLetraCorrectaDNI(int suma){
+        for (int i=0; i<9; i++) {
+
+            if (i<8) {    // PARA LOS 8 PRIMEROS DIGITOS SE COMPRUEBA QUE SEAN NUMEROS
+                
+                encontrado = false;
+                letra = dni.charAt(i);
+
+                if (letra == '1' || letra == '2'|| letra == '3' || letra == '4' || letra == '5' || letra == '6' || letra == '7' || letra == '8' || letra == '9' || letra == '0') {
+                    
+                    encontrado = true;
+                }
+
+                if (!encontrado) {
+                    
+                    estaBien = false;
+                }
+                
+            } else {   // PARA EL ULTIMO DIGITO SE COMPRUEBA QUE SEA UNA DE LAS LETRAS VALIDAS
+
+                encontrado = false;
+                
+                for (int j=0; j<letras.size(); j++) {
+                    if (dni.charAt(8) == letras.get(j)) {
+                        
+                        encontrado = true;
+                    }
+                }
+                
+                if (!encontrado) {
+                    estaBien = false;
+                }
+            }
+        }
+        return estaBien;
+    }
+
+    public static char obtenerLetraCorrectaDNI(int suma){   //se devuelve la letra correcta teniendo en cuenta el numero
         int numeroBusqueda = suma % 23;
         char caracterRetorno = letras.get(numeroBusqueda);
         return caracterRetorno;
     }
     
-    
+    public static String arreglarDNI(String dni){
+
+        String nuevoDNI = String.copyValueOf(dni.toCharArray());
+        int cantidad = Integer.parseInt(dni.substring(0, dni.length()-1));
+        char letra = obtenerLetraCorrectaDNI(cantidad);     //se obtiene la letra correspondiente al numero 
+        nuevoDNI = ((cantidad + "")+ letra);     
+        
+        return nuevoDNI;
+    }
     
 
 
