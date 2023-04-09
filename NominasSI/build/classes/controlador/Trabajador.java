@@ -63,6 +63,7 @@ public class Trabajador  implements java.io.Serializable {
     public Trabajador rellenarTrabajadorExcel(List<String> lista){
 
         // SE ELIMINAN LOS ESPACIOS EN BLANCO DE LA LISTA
+
         for (int i=0; i<lista.size(); i++) {
             
             if (lista.get(i) == "") {
