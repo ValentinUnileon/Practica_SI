@@ -61,25 +61,34 @@ public class Trabajador  implements java.io.Serializable {
     }
     
     public Trabajador rellenarTrabajadorExcel(List<String> lista){
+
+        // SE ELIMINAN LOS ESPACIOS EN BLANCO DE LA LISTA
+        for (int i=0; i<lista.size(); i++) {
+            
+            if (lista.get(i) == "") {
+                lista.remove(i);
+                i--;
+            }
+        }
         
         Trabajador nuevo = new Trabajador();
         
-        if(lista.size()==14){
-            nuevo.setIdTrabajador(Integer.parseInt(lista.get(13)));
-        }else if(lista.size()==13){
-            nuevo.setIdTrabajador(Integer.parseInt(lista.get(12)));
-        }else if(lista.size()==12) {
+        if(lista.size()==12){
             nuevo.setIdTrabajador(Integer.parseInt(lista.get(11)));
+        }else if(lista.size()==11){
+            nuevo.setIdTrabajador(Integer.parseInt(lista.get(10)));
+        }else if(lista.size()==10) {
+            nuevo.setIdTrabajador(Integer.parseInt(lista.get(9)));
         }
         
-        nuevo.setNifnie(lista.get(10));
+        nuevo.setNifnie(lista.get(8));
         System.out.println("EL NIF  ES "+nuevo.getNifnie());
-        nuevo.setNombre(lista.get(9));
+        nuevo.setNombre(lista.get(7));
         System.out.println("EL nombre en cambio  ES "+nuevo.getNombre());
-        nuevo.setApellido1(lista.get(7));
-        nuevo.setApellido2(lista.get(8));
-        nuevo.setEmpresa(lista.get(5));
-        nuevo.setCategoria(lista.get(6));
+        nuevo.setApellido1(lista.get(5));
+        nuevo.setApellido2(lista.get(6));
+        nuevo.setEmpresa(lista.get(3));
+        nuevo.setCategoria(lista.get(4));
             
         
         return nuevo;

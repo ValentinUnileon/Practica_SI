@@ -64,7 +64,7 @@ public class NominasSI {
     
     //Ejercicio 2
     
-        String rutaExcel = "C:/Usuarios/w10/Documentos/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+        String rutaExcel = "C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
         
         ExcelManager resolverEjercicio = new ExcelManager();
         
@@ -84,7 +84,7 @@ public class NominasSI {
             
             
         } catch (Exception ex) {
-           System.out.println(ex.getCause());
+           ex.printStackTrace();
         
         }
     }
