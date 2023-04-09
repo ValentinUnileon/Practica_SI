@@ -64,20 +64,14 @@ public class NominasSI {
     
     //Ejercicio 2
     
-        String rutaExcel = "C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+        String rutaExcel = getClass().getResource("/resources/sistemasInformacionII.xlsx").getPath();
         
         ExcelManager resolverEjercicio = new ExcelManager();
         
 
          try {
-             /*
-             List<String> listaNombres = resolverEjercicio.obtenerFila(rutaExcel, "09548150E"); //tener en cuenta que las hojas comienzan en 0
-             for (String celda : listaNombres) {
-                    System.out.println(celda);
-              } */
              
-             //resolverEjercicio.modificarDatos(rutaExcel, 1, "Cocinero", "lcoo");
-             //resolverEjercicio.procesarDNI(rutaExcel);
+             
              resolverEjercicio.procesarDNI(rutaExcel);
            
              

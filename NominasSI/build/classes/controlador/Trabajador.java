@@ -82,14 +82,14 @@ public class Trabajador  implements java.io.Serializable {
             nuevo.setIdTrabajador(Integer.parseInt(lista.get(9)));
         }
         
-        nuevo.setNifnie(lista.get(8));
-        System.out.println("EL NIF  ES "+nuevo.getNifnie());
-        nuevo.setNombre(lista.get(7));
-        System.out.println("EL nombre en cambio  ES "+nuevo.getNombre());
-        nuevo.setApellido1(lista.get(5));
-        nuevo.setApellido2(lista.get(6));
-        nuevo.setEmpresa(lista.get(3));
-        nuevo.setCategoria(lista.get(4));
+        nuevo.setNifnie(lista.get(9));
+        //System.out.println("EL NIF  ES "+nuevo.getNifnie());
+        nuevo.setNombre(lista.get(8));
+        //System.out.println("EL nombre en cambio  ES "+nuevo.getNombre());
+        nuevo.setApellido1(lista.get(6));
+        nuevo.setApellido2(lista.get(7));
+        nuevo.setEmpresa(lista.get(4));
+        nuevo.setCategoria(lista.get(5));
             
         
         return nuevo;

@@ -61,7 +61,7 @@ public class ExcelManager {
         int celdaActual = 0;
 
 
-        File archivoExcel = new File(localizacionExcel);                //ponerTrycatch
+        File archivoExcel = new File(localizacionExcel);                
         InputStream flujoEntrada = new FileInputStream(archivoExcel);
         XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
         XSSFSheet hojaExcel = libroExcel.getSheetAt(numHoja); 
@@ -110,7 +110,7 @@ public class ExcelManager {
         public void modificarDatos(String localizacionExcel, int numHoja, String antiguaCelda, String nuevaCelda) throws FileNotFoundException, IOException {
 
 
-            File archivoExcel = new File(localizacionExcel);                //ponerTrycatch
+            File archivoExcel = new File(localizacionExcel);                
             InputStream flujoEntrada = new FileInputStream(archivoExcel);
             XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
             XSSFSheet hojaExcel = libroExcel.getSheetAt(numHoja); 
@@ -152,7 +152,7 @@ public class ExcelManager {
             libroExcel.close();
             
          } catch (Exception e) {
-             // Manejo de la excepción
+
             e.printStackTrace();
          }
         
@@ -170,7 +170,7 @@ public class ExcelManager {
     //solo encuentra la primera aparicion    
     public List<String> obtenerFila(String localizacionExcel, String elemFila) throws FileNotFoundException, IOException{    //devuelve una lista con los elementos de una fila. La fila sera en la que se encuentre elemFila
     
-        File archivoExcel = new File(localizacionExcel);                //ponerTrycatch
+        File archivoExcel = new File(localizacionExcel);                
         InputStream flujoEntrada = new FileInputStream(archivoExcel);
         XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
         XSSFSheet hojaExcel = libroExcel.getSheetAt(0); 
@@ -184,7 +184,7 @@ public class ExcelManager {
         while(iteradorFilas.hasNext() && encontrado==false) 
         {
             XSSFRow fila = (XSSFRow) iteradorFilas.next(); 
-            //System.out.println("NumFIla esss: "+fila.getRowNum());          //PARA OBTENER EL NUMERO DE LA FILA DEL EXCEL
+            //System.out.println("NumFIla es: "+fila.getRowNum());          //PARA OBTENER EL NUMERO DE LA FILA DEL EXCEL
             Iterator<Cell> iteradorCeldas = fila.cellIterator();          
 
             while(iteradorCeldas.hasNext())
@@ -220,7 +220,7 @@ public class ExcelManager {
     
         public List<String> obtenerFilaRepeticiones(String localizacionExcel, String elemFila, int repeticion) throws FileNotFoundException, IOException{    //devuelve una lista con los elementos de una fila. La fila sera en la que se encuentre elemFila
     
-        File archivoExcel = new File(localizacionExcel);                //ponerTrycatch
+        File archivoExcel = new File(localizacionExcel);                
         InputStream flujoEntrada = new FileInputStream(archivoExcel);
         XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
         XSSFSheet hojaExcel = libroExcel.getSheetAt(0); 
@@ -236,7 +236,7 @@ public class ExcelManager {
         while(iteradorFilas.hasNext() && encontrado==false) 
         {
             XSSFRow fila = (XSSFRow) iteradorFilas.next(); 
-            //System.out.println("NumFIla esss: "+fila.getRowNum());          //PARA OBTENER EL NUMERO DE LA FILA DEL EXCEL
+            //System.out.println("NumFIla es: "+fila.getRowNum());          //PARA OBTENER EL NUMERO DE LA FILA DEL EXCEL
             Iterator<Cell> iteradorCeldas = fila.cellIterator();          
 
             while(iteradorCeldas.hasNext())
@@ -309,7 +309,7 @@ public class ExcelManager {
         
         
         
-        for(int i=0; i<listaDNI.size(); i++){       //hacer metodo para encontrar elems con mas de una aparicion (repetidos)
+        for(int i=0; i<listaDNI.size(); i++){       
             
             if(!listaDNI.get(i).equals("")){
                 
@@ -320,8 +320,6 @@ public class ExcelManager {
                 if(map.get(listaDNI.get(i))>1 && !listaDNI_Repetidos.contains(listaDNI.get(i))){  //comprobar que el dni se repite y que no se encuentra en la lista de "ya añadidos"
 
                     
-                    //introducir todos los trabajdores repetido al XML de errores menos el primero********
-                    //hacer metodo  obtenerFilaRepeticiones(String localizacionExcel, String elemFila, int numRepeticion) para obtener los datos de los trabajadores
                     //System.out.println("Añadidos a XML ERRORES por repeticion: "+ listaDNI.get(i)+" "+ map.get(listaDNI.get(i)));
                      
                     
@@ -345,9 +343,7 @@ public class ExcelManager {
                     
                     listaDNI_Repetidos.add(listaDNI.get(i));
                 }else{
-                    
-                                    //IGUAL HAY QUE METER ESTO DE DEBAJO EN ALGÚN ELSE, POR LO DE LOS REPETIDOS
-                
+                                    
                 int comprobacion=esValidoDNI(listaDNI.get(i));
                 
                 
@@ -516,11 +512,14 @@ public void agregarTrabajadoresAXML(List<Trabajador> trabajadores) throws Parser
 
         try{
         // cargamos el archivo XML existente en un objeto Document
-        File archivoXML = new File("C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/errores.xml");
+
+        String rutaXML = getClass().getResource("/resources/errores.xml").getPath();
+
+
+        File archivoXML = new File(rutaXML);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         
         DocumentBuilder db = dbf.newDocumentBuilder();
-       // Document doc = db.parse(archivoXML);
        
         Document doc = db.newDocument();
         Element rootElement = doc.createElement("Trabajadores");
