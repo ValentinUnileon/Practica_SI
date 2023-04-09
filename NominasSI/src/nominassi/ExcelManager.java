@@ -143,7 +143,7 @@ public class ExcelManager {
 
             }
         flujoEntrada.close();
-         System.out.println("la celda es: ");
+         //System.out.println("la celda es: ");
         
          try{
             FileOutputStream output_file = new FileOutputStream(new File(localizacionExcel));
@@ -359,7 +359,7 @@ public class ExcelManager {
                         //el error se puede subsanar -> LA LETRA ESTA MAL
                         String dniArreglado = arreglarDNI(listaDNI.get(i));  //DNI CON LA LETRA CORRECTA
                         this.modificarDatos(localizacionExcel, 0, listaDNI.get(i), dniArreglado);
-                        System.out.println("El dni: "+listaDNI.get(i)+" ha sido reemplazado por "+dniArreglado);
+                        //.out.println("El dni: "+listaDNI.get(i)+" ha sido reemplazado por "+dniArreglado);
                         break;
                     case 3:
                         //el error no es subsanable -> ESTÁ MAL ESTRUCTURADO -> añadir al XML
