@@ -477,7 +477,13 @@ public class ExcelManager {
         String nuevoDNI = String.copyValueOf(dni.toCharArray());
         int cantidad = Integer.parseInt(dni.substring(0, dni.length()-1));
         char letra = obtenerLetraCorrectaDNI(cantidad);     //se obtiene la letra correspondiente al numero 
-        nuevoDNI = ((cantidad + "")+ letra);     
+        nuevoDNI = ((cantidad + "")+ letra);   
+
+        if (nuevoDNI.length() < 9) {
+            for (int i=nuevoDNI.length(); i<9; i++) {
+                nuevoDNI = ('0'+nuevoDNI);
+            }
+        }
         
         return nuevoDNI;
     }
