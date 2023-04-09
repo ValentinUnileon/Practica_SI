@@ -66,15 +66,20 @@ public class Trabajador  implements java.io.Serializable {
         
         if(lista.size()==14){
             nuevo.setIdTrabajador(Integer.parseInt(lista.get(13)));
-        }else{
+        }else if(lista.size()==13){
             nuevo.setIdTrabajador(Integer.parseInt(lista.get(12)));
+        }else if(lista.size()==12) {
+            nuevo.setIdTrabajador(Integer.parseInt(lista.get(11)));
         }
         
-        nuevo.setNombre(lista.get(8));
-        nuevo.setApellido1(lista.get(6));
-        nuevo.setApellido2(lista.get(7));
-        nuevo.setEmpresa(lista.get(4));
-        nuevo.setCategoria(lista.get(5));
+        nuevo.setNifnie(lista.get(10));
+        System.out.println("EL NIF  ES "+nuevo.getNifnie());
+        nuevo.setNombre(lista.get(9));
+        System.out.println("EL nombre en cambio  ES "+nuevo.getNombre());
+        nuevo.setApellido1(lista.get(7));
+        nuevo.setApellido2(lista.get(8));
+        nuevo.setEmpresa(lista.get(5));
+        nuevo.setCategoria(lista.get(6));
             
         
         return nuevo;

@@ -1,108 +1,187 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Trabajadores>
-    <Trabajador id="13">
-        <Nombre>Prieto</Nombre>
-        <PrimerApellido>Programador</PrimerApellido>
-        <SegundoApellido>García</SegundoApellido>
-        <Empresa>P2492876R</Empresa>
-        <Categoria>PBlankSA</Categoria>
+    <Trabajador id="14">
+        <NIF_NIE>19898Y</NIF_NIE>
+        <Nombre>Armando</Nombre>
+        <PrimerApellido>García</PrimerApellido>
+        <SegundoApellido>Prieto</SegundoApellido>
+        <Empresa>PBlankSA</Empresa>
+        <Categoria>Programador</Categoria>
     </Trabajador>
-    <Trabajador id="17">
-        <Nombre>Rodríguez</Nombre>
-        <PrimerApellido>Operador</PrimerApellido>
-        <SegundoApellido>García</SegundoApellido>
-        <Empresa>P2492876R</Empresa>
-        <Categoria>PBlankSA</Categoria>
+    <Trabajador id="18">
+        <NIF_NIE>9548416N</NIF_NIE>
+        <Nombre>Antonio</Nombre>
+        <PrimerApellido>García</PrimerApellido>
+        <SegundoApellido>Rodríguez</SegundoApellido>
+        <Empresa>PBlankSA</Empresa>
+        <Categoria>Operador</Categoria>
     </Trabajador>
-    <Trabajador id="19">
-        <Nombre>Salas</Nombre>
-        <PrimerApellido>Auxiliar</PrimerApellido>
-        <SegundoApellido>González</SegundoApellido>
-        <Empresa>P2272621I</Empresa>
-        <Categoria>TecnoLeonSL</Categoria>
+    <Trabajador id="20">
+        <NIF_NIE>9548150E</NIF_NIE>
+        <Nombre>Pilar</Nombre>
+        <PrimerApellido>González</PrimerApellido>
+        <SegundoApellido>Salas</SegundoApellido>
+        <Empresa>TecnoLeonSL</Empresa>
+        <Categoria>Auxiliar</Categoria>
     </Trabajador>
-    <Trabajador id="38">
-        <Nombre>Prieto</Nombre>
-        <PrimerApellido>Programador</PrimerApellido>
-        <SegundoApellido>Flórez</SegundoApellido>
-        <Empresa>P2456841A</Empresa>
-        <Categoria>TecnoProyectSL</Categoria>
-    </Trabajador>
-    <Trabajador id="75">
-        <Nombre>Herreras</Nombre>
-        <PrimerApellido>Programador</PrimerApellido>
-        <SegundoApellido>Sutil</SegundoApellido>
-        <Empresa>P2472621I</Empresa>
-        <Categoria>TecnoLeonSL</Categoria>
-    </Trabajador>
-    <Trabajador id="37">
-        <Nombre>Prieto</Nombre>
-        <PrimerApellido>Auxiliar</PrimerApellido>
-        <SegundoApellido>Alonso</SegundoApellido>
-        <Empresa>P2456841A</Empresa>
-        <Categoria>TecnoProyectSL</Categoria>
-    </Trabajador>
-    <Trabajador id="41">
-        <Nombre>Robles</Nombre>
-        <PrimerApellido>Cocinero</PrimerApellido>
-        <SegundoApellido>Almanzar</SegundoApellido>
-        <Empresa>P2456841A</Empresa>
-        <Categoria>TecnoProyectSL</Categoria>
-    </Trabajador>
-    <Trabajador id="53">
-        <Nombre>Guerra</Nombre>
-        <PrimerApellido>Auxiliar</PrimerApellido>
-        <SegundoApellido>Pasado</SegundoApellido>
-        <Empresa>P2463928T</Empresa>
-        <Categoria>APhonSA</Categoria>
-    </Trabajador>
-    <Trabajador id="66">
-        <Nombre>García</Nombre>
-        <PrimerApellido>Cocinero</PrimerApellido>
-        <SegundoApellido>Blanco</SegundoApellido>
-        <Empresa>P2456841A</Empresa>
-        <Categoria>TecnoProyectSL</Categoria>
-    </Trabajador>
-    <Trabajador id="67">
-        <Nombre>García</Nombre>
-        <PrimerApellido>Auxiliar</PrimerApellido>
-        <SegundoApellido>Fernandez</SegundoApellido>
-        <Empresa>P2492876R</Empresa>
-        <Categoria>PBlankSA</Categoria>
+    <Trabajador id="39">
+        <NIF_NIE>01234567L</NIF_NIE>
+        <Nombre>Sara</Nombre>
+        <PrimerApellido>Flórez</PrimerApellido>
+        <SegundoApellido>Prieto</SegundoApellido>
+        <Empresa>TecnoProyectSL</Empresa>
+        <Categoria>Programador</Categoria>
     </Trabajador>
     <Trabajador id="76">
-        <Nombre>Laiz</Nombre>
-        <PrimerApellido>Coordinador</PrimerApellido>
-        <SegundoApellido>Díez</SegundoApellido>
-        <Empresa>P2418823C</Empresa>
-        <Categoria>Asoftware</Categoria>
+        <NIF_NIE>24304263W</NIF_NIE>
+        <Nombre>María</Nombre>
+        <PrimerApellido>Sutil</PrimerApellido>
+        <SegundoApellido>Herreras</SegundoApellido>
+        <Empresa>TecnoLeonSL</Empresa>
+        <Categoria>Programador</Categoria>
     </Trabajador>
-    <Trabajador id="88">
-        <Nombre>Candanedo</Nombre>
-        <PrimerApellido>Administrativo</PrimerApellido>
-        <SegundoApellido>Labarga</SegundoApellido>
-        <Empresa>P2418823C</Empresa>
-        <Categoria>Asoftware</Categoria>
+    <Trabajador id="38">
+        <NIF_NIE>9548295Y</NIF_NIE>
+        <Nombre>Cristina</Nombre>
+        <PrimerApellido>Alonso</PrimerApellido>
+        <SegundoApellido>Prieto</SegundoApellido>
+        <Empresa>TecnoProyectSL</Empresa>
+        <Categoria>Auxiliar</Categoria>
     </Trabajador>
-    <Trabajador id="88">
-        <Nombre>Candanedo</Nombre>
-        <PrimerApellido>Administrativo</PrimerApellido>
-        <SegundoApellido>Labarga</SegundoApellido>
-        <Empresa>P2418823C</Empresa>
-        <Categoria>Asoftware</Categoria>
+    <Trabajador id="42">
+        <NIF_NIE>9785530L</NIF_NIE>
+        <Nombre>Herminia</Nombre>
+        <PrimerApellido>Almanzar</PrimerApellido>
+        <SegundoApellido>Robles</SegundoApellido>
+        <Empresa>TecnoProyectSL</Empresa>
+        <Categoria>Cocinero</Categoria>
     </Trabajador>
-    <Trabajador id="92">
-        <Nombre>Castañeda</Nombre>
-        <PrimerApellido>Jefe de servicio</PrimerApellido>
-        <SegundoApellido>Gomez</SegundoApellido>
-        <Empresa>P2418823C</Empresa>
-        <Categoria>Asoftware</Categoria>
+    <Trabajador id="54">
+        <NIF_NIE>ss738010V</NIF_NIE>
+        <Nombre>Alencar</Nombre>
+        <PrimerApellido>Pasado</PrimerApellido>
+        <SegundoApellido>Guerra</SegundoApellido>
+        <Empresa>APhonSA</Empresa>
+        <Categoria>Auxiliar</Categoria>
     </Trabajador>
-    <Trabajador id="92">
-        <Nombre>Castañeda</Nombre>
-        <PrimerApellido>Jefe de servicio</PrimerApellido>
-        <SegundoApellido>Gomez</SegundoApellido>
-        <Empresa>P2418823C</Empresa>
-        <Categoria>Asoftware</Categoria>
+    <Trabajador id="67">
+        <NIF_NIE>9548827D</NIF_NIE>
+        <Nombre>Saaida</Nombre>
+        <PrimerApellido>Blanco</PrimerApellido>
+        <SegundoApellido>García</SegundoApellido>
+        <Empresa>TecnoProyectSL</Empresa>
+        <Categoria>Cocinero</Categoria>
+    </Trabajador>
+    <Trabajador id="68">
+        <NIF_NIE>X8996448K</NIF_NIE>
+        <Nombre>Antonio</Nombre>
+        <PrimerApellido>Fernandez</PrimerApellido>
+        <SegundoApellido>García</SegundoApellido>
+        <Empresa>PBlankSA</Empresa>
+        <Categoria>Auxiliar</Categoria>
+    </Trabajador>
+    <Trabajador id="77">
+        <NIF_NIE>X3387K</NIF_NIE>
+        <Nombre>Federico</Nombre>
+        <PrimerApellido>Díez</PrimerApellido>
+        <SegundoApellido>Laiz</SegundoApellido>
+        <Empresa>Asoftware</Empresa>
+        <Categoria>Coordinador</Categoria>
+    </Trabajador>
+    <Trabajador id="83">
+        <NIF_NIE>SI</NIF_NIE>
+        <Nombre>w9314602Q</Nombre>
+        <PrimerApellido>Melcón</PrimerApellido>
+        <SegundoApellido>Melisa</SegundoApellido>
+        <Empresa>Jefe división</Empresa>
+        <Categoria>Marín</Categoria>
+    </Trabajador>
+    <Trabajador id="90">
+        <NIF_NIE>SI</NIF_NIE>
+        <Nombre>Y1337652D</Nombre>
+        <PrimerApellido>Herrero</PrimerApellido>
+        <SegundoApellido>Marta</SegundoApellido>
+        <Empresa>APhonSA</Empresa>
+        <Categoria>Ordenanza</Categoria>
+    </Trabajador>
+    <Trabajador id="89">
+        <NIF_NIE>Y1337652D</NIF_NIE>
+        <Nombre>Marisa</Nombre>
+        <PrimerApellido>Labarga</PrimerApellido>
+        <SegundoApellido>Candanedo</SegundoApellido>
+        <Empresa>Asoftware</Empresa>
+        <Categoria>Administrativo</Categoria>
+    </Trabajador>
+    <Trabajador id="89">
+        <NIF_NIE>Y1337652D</NIF_NIE>
+        <Nombre>Marisa</Nombre>
+        <PrimerApellido>Labarga</PrimerApellido>
+        <SegundoApellido>Candanedo</SegundoApellido>
+        <Empresa>Asoftware</Empresa>
+        <Categoria>Administrativo</Categoria>
+    </Trabajador>
+    <Trabajador id="127">
+        <NIF_NIE>NO</NIF_NIE>
+        <Nombre>X1673150S</Nombre>
+        <PrimerApellido>Cembranos</PrimerApellido>
+        <SegundoApellido>Ismael</SegundoApellido>
+        <Empresa>Analista</Empresa>
+        <Categoria>Vara</Categoria>
+    </Trabajador>
+    <Trabajador id="93">
+        <NIF_NIE>X1673150S</NIF_NIE>
+        <Nombre>Carmen</Nombre>
+        <PrimerApellido>Gomez</PrimerApellido>
+        <SegundoApellido>Castañeda</SegundoApellido>
+        <Empresa>Asoftware</Empresa>
+        <Categoria>Jefe de servicio</Categoria>
+    </Trabajador>
+    <Trabajador id="102">
+        <NIF_NIE>SI</NIF_NIE>
+        <Nombre>X5106131Q</Nombre>
+        <PrimerApellido>Coello </PrimerApellido>
+        <SegundoApellido>Mario</SegundoApellido>
+        <Empresa>Analista</Empresa>
+        <Categoria>Herrero</Categoria>
+    </Trabajador>
+    <Trabajador id="105">
+        <NIF_NIE>SI</NIF_NIE>
+        <Nombre>0945</Nombre>
+        <PrimerApellido>Diez</PrimerApellido>
+        <SegundoApellido>Federico</SegundoApellido>
+        <Empresa>Jefe división</Empresa>
+        <Categoria>Gomez</Categoria>
+    </Trabajador>
+    <Trabajador id="93">
+        <NIF_NIE>X1673150S</NIF_NIE>
+        <Nombre>Carmen</Nombre>
+        <PrimerApellido>Gomez</PrimerApellido>
+        <SegundoApellido>Castañeda</SegundoApellido>
+        <Empresa>Asoftware</Empresa>
+        <Categoria>Jefe de servicio</Categoria>
+    </Trabajador>
+    <Trabajador id="130">
+        <NIF_NIE>NO</NIF_NIE>
+        <Nombre>Y0806930N</Nombre>
+        <PrimerApellido>Chamorro</PrimerApellido>
+        <SegundoApellido>Nelida</SegundoApellido>
+        <Empresa>Jefe división</Empresa>
+        <Categoria>Blanco</Categoria>
+    </Trabajador>
+    <Trabajador id="129">
+        <NIF_NIE>NO</NIF_NIE>
+        <Nombre>Y0806930N</Nombre>
+        <PrimerApellido>Cerro</PrimerApellido>
+        <SegundoApellido>Elisa</SegundoApellido>
+        <Empresa>Cocinero</Empresa>
+        <Categoria>Bernal</Categoria>
+    </Trabajador>
+    <Trabajador id="129">
+        <NIF_NIE>NO</NIF_NIE>
+        <Nombre>Y0806930N</Nombre>
+        <PrimerApellido>Cerro</PrimerApellido>
+        <SegundoApellido>Elisa</SegundoApellido>
+        <Empresa>Cocinero</Empresa>
+        <Categoria>Bernal</Categoria>
     </Trabajador>
 </Trabajadores>
