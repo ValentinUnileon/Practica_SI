@@ -78,8 +78,8 @@ public class NominasSI {
              
              //resolverEjercicio.modificarDatos(rutaExcel, 1, "Cocinero", "lcoo");
              //resolverEjercicio.procesarDNI(rutaExcel);
-             resolverEjercicio.agregarTrabajadoresAXML();
-             
+             resolverEjercicio.procesarDNI(rutaExcel);
+           
              
             
             

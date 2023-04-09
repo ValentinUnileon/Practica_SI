@@ -1,5 +1,6 @@
 package nominassi;
 
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,6 +17,7 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -37,6 +39,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import controlador.Trabajador;
 import org.w3c.dom.Text;
 
 /**
@@ -47,6 +50,7 @@ public class ExcelManager {
 
 
     private static List<Character> letras = new ArrayList<Character>();
+    private Trabajador trabajadorAux= new Trabajador();
 
   
     public List<String> obtenerColumnasDatos(String localizacionExcel, String nombreColumna, int numHoja) throws FileNotFoundException, IOException {
@@ -191,16 +195,25 @@ public class ExcelManager {
                 
                 if(celda.toString().equals(elemFila)) {
                     encontrado=true;
+                    int num=0;
                     Iterator<Cell> iteradorCeldasFila = fila.cellIterator();        //creamos nuevo iterador para la fila
                     while(iteradorCeldasFila.hasNext()) {
                         XSSFCell celdaFila = (XSSFCell) iteradorCeldasFila.next();
+                        num=fila.getRowNum();
+                        
                         listaResultado.add(celdaFila.toString());
+                        
+                        
                     }
+                    listaResultado.add(""+num);
+                    
+                    
                 }
             }
 
         }
 
+        
       
         return listaResultado;
     }
@@ -223,11 +236,11 @@ public class ExcelManager {
         return map;
     }
         
-    public void procesarDNI(String localizacionExcel) throws FileNotFoundException, IOException {
+    public void procesarDNI(String localizacionExcel) throws FileNotFoundException, IOException, ParserConfigurationException, SAXException, org.xml.sax.SAXException {
         
         // SE RELLENA LA LISTA QUE CONTIENE LAS LETRAS DE LOS DNI
         char[] listaAux = new char[]{'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H', 'L', 'C', 'K', 'E'};
-        
+        List<Trabajador> trabajadoresErrores= new ArrayList<>();
         for(int i=0; i<23; i++) {
             letras.add(listaAux[i]);
         }
@@ -256,7 +269,8 @@ public class ExcelManager {
                 
                 int comprobacion=esValidoDNI(listaDNI.get(i));
                 
-                System.out.println(comprobacion);
+                
+                
                 
                 switch(comprobacion){
                     case 1:
@@ -269,32 +283,35 @@ public class ExcelManager {
                         System.out.println("El dni: "+listaDNI.get(i)+" ha sido reemplazado por "+dniArreglado);
                         break;
                     case 3:
-                        //el error no es subsanable -> ESTÁ MAL ESTRUCTURADO
-                        break;
+                        //el error no es subsanable -> ESTÁ MAL ESTRUCTURADO -> añadir al XML
+                        
+                        List<String> filaTrabajador= this.obtenerFila(localizacionExcel, listaDNI.get(i));
+
+                        System.out.println(listaDNI.get(i));
+                        
+
+                        Trabajador trabajadorProvisional = trabajadorAux.rellenarTrabajadorExcel(filaTrabajador);
+                        System.out.println(trabajadorProvisional.getNombre());
+
+                        trabajadoresErrores.add(trabajadorProvisional);
+                        
+                       break;
+
                                
                 }
                 
-                /*
-                
-                if (esValidoDNI(listaDNI.get(i)) == 1) {
-                    //castañas
-                    System.out.println("valido: "+listaDNI.get(i));
-                } else {
-
-                    //hay un error en el dni
-
-                    if (esValidoDNI(listaDNI.get(i)) == 2) {
-                        
-                    
-                    } else if(esValidoDNI(listaDNI.get(i)) == 3) {
-
-                        //el error no es subsanable -> ESTÁ MAL ESTRUCTURADO
-                    }
-                }
-                */
             }
         }
        
+        if(trabajadoresErrores.size()>0){
+            
+            try {
+                this.agregarTrabajadoresAXML(trabajadoresErrores);
+            } catch (TransformerException ex) {
+               System.out.println(ex);
+            }
+            
+        }
         
 
         
@@ -392,7 +409,7 @@ public class ExcelManager {
     
     
     
-    public void agregarTrabajadoresAXML() throws ParserConfigurationException, IOException, SAXException, TransformerException, org.xml.sax.SAXException {
+public void agregarTrabajadoresAXML(List<Trabajador> trabajadores) throws ParserConfigurationException, IOException, SAXException, TransformerException, org.xml.sax.SAXException {
 
         try{
         // cargamos el archivo XML existente en un objeto Document
@@ -400,43 +417,47 @@ public class ExcelManager {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(archivoXML);
+       // Document doc = db.parse(archivoXML);
+       
+        Document doc = db.newDocument();
+        Element rootElement = doc.createElement("Trabajadores");
+        doc.appendChild(rootElement);
 
         // obtenemos la raíz del documento existente
         Element eRaiz = doc.getDocumentElement();
 
         // creamos un nuevo elemento para cada trabajador
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < trabajadores.size(); i++) {
 
             Element xmlTrabajador = doc.createElement("Trabajador");
 
             // creamos el atributo "id" para el trabajador
             Attr atributoID = doc.createAttribute("id");
-            atributoID.setValue("1");
+            atributoID.setValue(""+trabajadores.get(i).getIdTrabajador());
             xmlTrabajador.setAttributeNode(atributoID);
 
             // creamos los elementos secundarios para el trabajador y les asignamos el valor correspondiente
             Element nombre = doc.createElement("Nombre");
-            nombre.appendChild(doc.createTextNode("d"));
+            nombre.appendChild(doc.createTextNode(trabajadores.get(i).getNombre()));
             xmlTrabajador.appendChild(nombre);
             
             
 
             Element apellido1 = doc.createElement("PrimerApellido");
-            apellido1.appendChild(doc.createTextNode("ds"));
+            apellido1.appendChild(doc.createTextNode(trabajadores.get(i).getApellido1()));
             xmlTrabajador.appendChild(apellido1);
 
             Element apellido2 = doc.createElement("SegundoApellido");
-            apellido2.appendChild(doc.createTextNode("dfs"));
+            apellido2.appendChild(doc.createTextNode(trabajadores.get(i).getApellido2()));
             xmlTrabajador.appendChild(apellido2);
             
 
             Element empresa = doc.createElement("Empresa");
-            empresa.appendChild(doc.createTextNode("s"));
+            empresa.appendChild(doc.createTextNode(trabajadores.get(i).getEmpresa()));
             xmlTrabajador.appendChild(empresa);
 
             Element categoria = doc.createElement("Categoria");
-            categoria.appendChild(doc.createTextNode("asdf"));
+            categoria.appendChild(doc.createTextNode(trabajadores.get(i).getCategoria()));
             xmlTrabajador.appendChild(categoria);
 
             // añadimos el elemento del trabajador a la raíz del documento
@@ -446,14 +467,20 @@ public class ExcelManager {
         // actualizamos el archivo XML
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes"); // configuramos la propiedad para que se escriba en varias líneas
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(archivoXML);
         transformer.transform(source, result);
+        
+        
+
+
         
         }catch(Exception e){
             e.printStackTrace();
         }
     }
+
 
     
 
