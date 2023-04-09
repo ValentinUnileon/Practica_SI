@@ -217,6 +217,59 @@ public class ExcelManager {
       
         return listaResultado;
     }
+    
+    
+        public List<String> obtenerFilaRepeticiones(String localizacionExcel, String elemFila, int repeticion) throws FileNotFoundException, IOException{    //devuelve una lista con los elementos de una fila. La fila sera en la que se encuentre elemFila
+    
+        File archivoExcel = new File(localizacionExcel);                //ponerTrycatch
+        InputStream flujoEntrada = new FileInputStream(archivoExcel);
+        XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
+        XSSFSheet hojaExcel = libroExcel.getSheetAt(0); 
+
+        Iterator<Row> iteradorFilas = hojaExcel.iterator(); 
+        List<String> listaResultado = new ArrayList<>();
+        boolean encontrado=false;
+        
+        int aux=repeticion-1;
+
+
+
+        while(iteradorFilas.hasNext() && encontrado==false) 
+        {
+            XSSFRow fila = (XSSFRow) iteradorFilas.next(); 
+            //System.out.println("NumFIla esss: "+fila.getRowNum());          //PARA OBTENER EL NUMERO DE LA FILA DEL EXCEL
+            Iterator<Cell> iteradorCeldas = fila.cellIterator();          
+
+            while(iteradorCeldas.hasNext())
+            {
+                XSSFCell celda = (XSSFCell) iteradorCeldas.next();
+
+                
+                if(celda.toString().equals(elemFila) && aux==0) {
+                    encontrado=true;
+                    int num=0;
+                    Iterator<Cell> iteradorCeldasFila = fila.cellIterator();        //creamos nuevo iterador para la fila
+                    while(iteradorCeldasFila.hasNext()) {
+                        XSSFCell celdaFila = (XSSFCell) iteradorCeldasFila.next();
+                        num=fila.getRowNum();
+                        
+                        listaResultado.add(celdaFila.toString());                     
+                        
+                    }
+                    listaResultado.add(""+num);
+                    
+                    
+                }else if(celda.toString().equals(elemFila)){
+                    aux= aux-1;
+                }
+            }
+
+        }
+
+        
+      
+        return listaResultado;
+    }
         
     
     
@@ -253,14 +306,32 @@ public class ExcelManager {
             
             if(!listaDNI.get(i).equals("")){
                 
-                //System.out.println("el elemento "+listaDNI.get(i)+" se repite estas veces: "+map.get(listaDNI.get(i)) );
+                System.out.println("el elemento "+listaDNI.get(i)+" se repite estas veces: "+map.get(listaDNI.get(i)) );
                 
               
                 
                 if(map.get(listaDNI.get(i))>1 && !listaDNI_Repetidos.contains(listaDNI.get(i))){  //comprobar que el dni se repite y que no se encuentra en la lista de "ya añadidos"
+                    
+                    
                     //introducir todos los trabajdores repetido al XML de errores menos el primero********
                     //hacer metodo  obtenerFilaRepeticiones(String localizacionExcel, String elemFila, int numRepeticion) para obtener los datos de los trabajadores
-                    //System.out.println("Añadidos a XML ERRORES: "+ listaDNI.get(i));
+                    System.out.println("Añadidos a XML ERRORES: "+ listaDNI.get(i)+" "+ map.get(listaDNI.get(i)));
+                     
+                    
+                    for(int j=2; j< map.get(listaDNI.get(i))+1; j++){
+                        
+                        try{
+                        
+                        List<String> filaTrabajador= this.obtenerFilaRepeticiones(localizacionExcel, listaDNI.get(i), j);
+                        Trabajador trabajadorProvisional1 = trabajadorAux.rellenarTrabajadorExcel(filaTrabajador);
+                        System.out.println(trabajadorProvisional1.getNombre()+" repetido");
+
+                        trabajadoresErrores.add(trabajadorProvisional1);
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                        
+                    }
                     
                     listaDNI_Repetidos.add(listaDNI.get(i));
                 }
@@ -287,13 +358,18 @@ public class ExcelManager {
                         
                         List<String> filaTrabajador= this.obtenerFila(localizacionExcel, listaDNI.get(i));
 
-                        System.out.println(listaDNI.get(i));
-                        
+                        System.out.println(listaDNI.get(i)+"movida longitud "+filaTrabajador.size());
 
+                        
+                        
+                        try{
                         Trabajador trabajadorProvisional = trabajadorAux.rellenarTrabajadorExcel(filaTrabajador);
                         System.out.println(trabajadorProvisional.getNombre());
 
                         trabajadoresErrores.add(trabajadorProvisional);
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
                         
                        break;
 

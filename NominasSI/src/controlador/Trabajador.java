@@ -67,7 +67,7 @@ public class Trabajador  implements java.io.Serializable {
         if(lista.size()==14){
             nuevo.setIdTrabajador(Integer.parseInt(lista.get(13)));
         }else{
-            nuevo.setIdTrabajador(Integer.parseInt(lista.get(11)));
+            nuevo.setIdTrabajador(Integer.parseInt(lista.get(12)));
         }
         
         nuevo.setNombre(lista.get(8));
