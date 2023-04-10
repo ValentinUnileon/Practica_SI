@@ -513,7 +513,7 @@ public void agregarTrabajadoresAXML(List<Trabajador> trabajadores) throws Parser
         try{
         // cargamos el archivo XML existente en un objeto Document
 
-        String rutaXML = getClass().getResource("/resources/errores.xml").getPath();
+        String rutaXML = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/Errores.xml";
 
 
         File archivoXML = new File(rutaXML);

@@ -64,7 +64,12 @@ public class NominasSI {
     
     //Ejercicio 2
     
-        String rutaExcel = getClass().getResource("/resources/sistemasInformacionII.xlsx").getPath();
+        String rutaExcel;
+        rutaExcel = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+
+
+        
+
         
         ExcelManager resolverEjercicio = new ExcelManager();
         
