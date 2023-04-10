@@ -440,6 +440,37 @@ public class ExcelManager {
 
         return esValido;
     }
+    
+    public static int esValidoNIE(String nie) {     //SIN TERMINAR
+        
+        // RETURN:
+        // 1 - VALIDO
+        // 2 - ERROR SUBSANABLE
+        // 3 - ERROR NO SUBSANABLE
+    
+        int esValido = 3;
+        char letra;
+        int cantidad;
+
+        if (nie.length() == 9) {   //el dni tiene longitud 9
+                  
+            if (estaBienEstructurado(nie)) {
+                
+                letra = nie.charAt(8);
+                cantidad = Integer.parseInt(nie.substring(0, nie.length()-1));
+
+                if (letra == obtenerLetraCorrectaDNI(cantidad)) {  //si la letra es la correcta, el dni es valido
+
+                    esValido = 1;
+                } else {    // si la letra no es la correcta, el dni es erroneo pero subsanable
+                
+                    esValido = 2;
+                }
+            } 
+        }
+
+        return esValido;
+    }
 
     public static boolean estaBienEstructurado(String dni) {
     
@@ -513,7 +544,7 @@ public void agregarTrabajadoresAXML(List<Trabajador> trabajadores) throws Parser
         try{
         // cargamos el archivo XML existente en un objeto Document
 
-        String rutaXML = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/Errores.xml";
+        String rutaXML = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
 
 
         File archivoXML = new File(rutaXML);

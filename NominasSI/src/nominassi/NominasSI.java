@@ -65,7 +65,7 @@ public class NominasSI {
     //Ejercicio 2
     
         String rutaExcel;
-        rutaExcel = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+        rutaExcel = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
 
 
         
