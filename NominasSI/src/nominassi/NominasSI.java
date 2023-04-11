@@ -64,9 +64,9 @@ public class NominasSI {
     
     //Ejercicio 2
     
-        String rutaExcel;
-        rutaExcel = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
-
+        String rutaDavid, rutaValentin;
+        rutaDavid = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+        rutaValentin="C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
 
         
 
@@ -77,7 +77,8 @@ public class NominasSI {
          try {
              
              
-             resolverEjercicio.procesarDNI(rutaExcel);
+             //resolverEjercicio.procesarDNI(rutaExcel);
+             resolverEjercicio.guardarHoja2(rutaValentin);
            
              
             

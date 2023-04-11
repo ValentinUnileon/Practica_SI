@@ -51,8 +51,37 @@ public class ExcelManager {
 
     private static List<Character> letras = new ArrayList<Character>();
     private Trabajador trabajadorAux= new Trabajador();
+    private Map<String, String> categoria_Complementos= new HashMap<>();
+    private Map<String, String> categoria_SalarioBase=new HashMap<>();
+    
+    
+    //metodos para almacenar los datos del excel
+    
+    
+    public void guardarHoja2(String localizacionExcel) throws IOException{
+        
+        
+        List<String> categoria=this.obtenerColumnasDatos(localizacionExcel, "Categoria", 1);
+        List<String> complementos=this.obtenerColumnasDatos(localizacionExcel, "Complementos", 1);
 
-  
+       
+        
+        
+        for(int i=0; i<categoria.size(); i++){
+            
+            //System.out.println(complementos.get(i));
+            categoria_Complementos.put(categoria.get(i), complementos.get(i));
+            
+        }
+        
+        for (Map.Entry<String, String> entry : categoria_Complementos.entrySet()) {
+            System.out.println(entry.getKey() + entry.getValue());
+        }
+        
+        
+    }
+
+   
     public List<String> obtenerColumnasDatos(String localizacionExcel, String nombreColumna, int numHoja) throws FileNotFoundException, IOException {
         int contadorFilas = 1;
         int tope = 0; 
