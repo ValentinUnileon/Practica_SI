@@ -40,6 +40,10 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import controlador.Trabajador;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import org.w3c.dom.Text;
 
 /**
@@ -47,41 +51,128 @@ import org.w3c.dom.Text;
  * @author David
  */
 public class ExcelManager {
-
-
+    
+    //Ubicacion excel
+    // RUTA VALENTIN PORTATIL private String localizacionExcel ="C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    // RUTA DAVID private String localizacionExcel ="C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    private final String localizacionExcel ="C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    
+    //Datos de las hojas del excel
+    
+    private List<Trabajador> trabajadoresHoja1= new ArrayList<>();
+    
+    private final Map<String, String> categoria_Complementos= new HashMap<>();
+    private final Map<String, String> categoria_SalarioBase=new HashMap<>();
+    
+    //
     private static List<Character> letras = new ArrayList<Character>();
     private Trabajador trabajadorAux= new Trabajador();
-    private Map<String, String> categoria_Complementos= new HashMap<>();
-    private Map<String, String> categoria_SalarioBase=new HashMap<>();
+
     
     
-    //metodos para almacenar los datos del excel
+    //Metodos para guardar la hojas del excel
     
-    
-    public void guardarHoja2(String localizacionExcel) throws IOException{
         
+    public void mapearHoja1() throws IOException, ParseException{
+        
+        
+        List<String> paisOrigen = this.obtenerColumnasDatos(localizacionExcel, "Pais Origen Cuenta Bancaria", 0);
+        List<String> codigoCuenta = this.obtenerColumnasDatos(localizacionExcel, "CodigoCuenta", 0);
+        List<String> iban = this.obtenerColumnasDatos(localizacionExcel, "IBAN", 0);
+        List<String> email = this.obtenerColumnasDatos(localizacionExcel, "Email", 0);
+        List<String> fechaAltaEmpresa = this.obtenerColumnasDatos(localizacionExcel, "FechaAltaEmpresa", 0);
+        List<String> cifEmpresa = this.obtenerColumnasDatos(localizacionExcel, "Cif empresa", 0);
+        List<String> nombreEmpresa = this.obtenerColumnasDatos(localizacionExcel, "Nombre empresa", 0);
+        List<String> categoria = this.obtenerColumnasDatos(localizacionExcel, "Categoria", 0);
+        List<String> apellido1 = this.obtenerColumnasDatos(localizacionExcel, "Apellido1", 0);
+        List<String> apellido2 = this.obtenerColumnasDatos(localizacionExcel, "Apellido2", 0);
+        List<String> nombre = this.obtenerColumnasDatos(localizacionExcel, "Nombre", 0);
+        List<String> dnis = this.obtenerColumnasDatos(localizacionExcel, "NIF/NIE", 0);
+        List<String> prorrata = this.obtenerColumnasDatos(localizacionExcel, "ProrrataExtra", 0);
+        List<String> fechaBajaLaboral = this.obtenerColumnasDatos(localizacionExcel, "FechaBajaLaboral", 0);
+        List<String> fechaAltaLaboral = this.obtenerColumnasDatos(localizacionExcel, "FechaAltaLaboral", 0);
+        
+        
+        
+        int contador=2;
+        
+       
+        
+        for(int i=0; i<codigoCuenta.size(); i++){
+            
+            if(!codigoCuenta.get(i).equals("")){
+               
+                //System.out.println("El dni de la fila es "+" ---- "+fechaAltaLaboral.get(i)+" ----- APE "+apellido1.get(i)+" y el nombre es "+nombre.get(i));                
+                //System.out.println(fechaAltaEmpresa.get(i));
+                
+                //Preparamos las fechas
+
+                SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MMM-yyyy", new Locale("es", "ES"));
+                SimpleDateFormat formatoFechaNuevo = new SimpleDateFormat("dd-MM-yyyy");
+
+                Date fecha1 = formatoFecha.parse(fechaAltaEmpresa.get(i));
+                Date fecha2 = formatoFecha.parse(fechaBajaLaboral.get(i));
+                Date fecha3 = formatoFecha.parse(fechaAltaLaboral.get(i));
+
+                String fecha_fechaAltaEmpresa = formatoFechaNuevo.format(fecha1);
+                String fecha_fechaBajaEmpresa = formatoFechaNuevo.format(fecha2);
+                String fecha_fechaAltaLaboral = formatoFechaNuevo.format(fecha3);
+
+
+                
+                
+                /*
+                
+                Trabajador aux = new Trabajador(this.obtenerNumFila(localizacionExcel, codigoCuenta.get(i)), codigoCuenta.get(i)
+                        , iban.get(i)
+                        , email.get(i)
+                        , fecha_fechaAltaEmpresa
+                        , cifEmpresa.get(i)
+                        , categoria.get(i)
+                        , apellido1.get(i)
+                        , apellido2.get(i)
+                        , nombre.get(i)
+                        , dnis.get(i)
+                        , fechaBajaLaboral.get(i)
+                        , fechaAltaLaboral.get(i)); */
+                
+               
+                
+                //trabajadoresHoja1.add(aux);
+     
+            }
+            
+           
+
+        }
+        
+   
+        
+    }
+    
+    
+    public void mapearHoja2() throws IOException{
         
         List<String> categoria=this.obtenerColumnasDatos(localizacionExcel, "Categoria", 1);
         List<String> complementos=this.obtenerColumnasDatos(localizacionExcel, "Complementos", 1);
-
-       
-        
+        List<String> salarioBase=this.obtenerColumnasDatos(localizacionExcel, "Salario Base", 1);
+  
+        for(int i=0; i<categoria.size(); i++){
+            categoria_Complementos.put(categoria.get(i), complementos.get(i));       
+        }
         
         for(int i=0; i<categoria.size(); i++){
-            
-            //System.out.println(complementos.get(i));
-            categoria_Complementos.put(categoria.get(i), complementos.get(i));
-            
+            categoria_SalarioBase.put(categoria.get(i), salarioBase.get(i));       
         }
         
-        for (Map.Entry<String, String> entry : categoria_Complementos.entrySet()) {
+        /*
+        for (Map.Entry<String, String> entry : categoria_SalarioBase.entrySet()) {
             System.out.println(entry.getKey() + entry.getValue());
-        }
-        
-        
+        }  */            
     }
 
    
+    //Final metodos para guardar la hojas del excel
     public List<String> obtenerColumnasDatos(String localizacionExcel, String nombreColumna, int numHoja) throws FileNotFoundException, IOException {
         int contadorFilas = 1;
         int tope = 0; 
@@ -136,7 +227,7 @@ public class ExcelManager {
     
     
     
-        public void modificarDatos(String localizacionExcel, int numHoja, String antiguaCelda, String nuevaCelda) throws FileNotFoundException, IOException {
+    public void modificarDatos(String localizacionExcel, int numHoja, String antiguaCelda, String nuevaCelda) throws FileNotFoundException, IOException {
 
 
             File archivoExcel = new File(localizacionExcel);                
@@ -164,9 +255,7 @@ public class ExcelManager {
                     {
                         celda.setCellValue(nuevaCelda);
                         //System.out.println("la celda es: "+ celda.toString());
-
                     }                                            
-
 
                 }
 
@@ -184,17 +273,10 @@ public class ExcelManager {
 
             e.printStackTrace();
          }
-        
-         
        
-
+    }
         
-
-
-
-
-        }
-        
+ 
         
     //solo encuentra la primera aparicion    
     public List<String> obtenerFila(String localizacionExcel, String elemFila) throws FileNotFoundException, IOException{    //devuelve una lista con los elementos de una fila. La fila sera en la que se encuentre elemFila
@@ -231,6 +313,8 @@ public class ExcelManager {
                         
                         listaResultado.add(celdaFila.toString());
                         
+                        System.out.println(celdaFila.toString());
+                        
                         
                     }
                     listaResultado.add(""+num);
@@ -240,7 +324,6 @@ public class ExcelManager {
             }
 
         }
-
         
       
         return listaResultado;
@@ -259,8 +342,6 @@ public class ExcelManager {
         boolean encontrado=false;
         
         int aux=repeticion-1;
-
-
 
         while(iteradorFilas.hasNext() && encontrado==false) 
         {
@@ -303,7 +384,7 @@ public class ExcelManager {
       
         return listaResultado;
     }
-        
+       
     
     
     
@@ -321,6 +402,35 @@ public class ExcelManager {
         
         return map;
     }
+    
+    public int obtenerNumFila(String localizacionExcel, String elemFila) throws FileNotFoundException, IOException{    //devuelve una lista con los elementos de una fila. La fila sera en la que se encuentre elemFila
+    
+        File archivoExcel = new File(localizacionExcel);                
+        InputStream flujoEntrada = new FileInputStream(archivoExcel);
+        XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
+        XSSFSheet hojaExcel = libroExcel.getSheetAt(0); 
+
+        Iterator<Row> iteradorFilas = hojaExcel.iterator(); 
+        boolean encontrado=false;
+        int num=-1;
+        
+        while(iteradorFilas.hasNext() && encontrado==false) 
+        {
+            XSSFRow fila = (XSSFRow) iteradorFilas.next(); 
+            Iterator<Cell> iteradorCeldas = fila.cellIterator();          
+
+            while(iteradorCeldas.hasNext())
+            {
+                XSSFCell celda = (XSSFCell) iteradorCeldas.next();
+                
+                if(celda.toString().equals(elemFila)) {
+                    encontrado=true;
+                    num=fila.getRowNum()+1;
+                }
+            }
+        }
+        return num;
+    }    
         
     public void procesarDNI(String localizacionExcel) throws FileNotFoundException, IOException, ParserConfigurationException, SAXException, org.xml.sax.SAXException {
         

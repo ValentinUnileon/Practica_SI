@@ -78,7 +78,7 @@ public class NominasSI {
              
              
              //resolverEjercicio.procesarDNI(rutaExcel);
-             resolverEjercicio.guardarHoja2(rutaValentin);
+             resolverEjercicio.mapearHoja1();
            
              
             
