@@ -53,9 +53,9 @@ import org.w3c.dom.Text;
 public class ExcelManager {
     
     //Ubicacion excel
-    // RUTA VALENTIN PORTATIL private String localizacionExcel ="C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    private String localizacionExcel ="C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
     // RUTA DAVID private String localizacionExcel ="C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
-    private final String localizacionExcel ="C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    //RUTA VALENTIN PC private final String localizacionExcel ="C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
     
     //Datos de las hojas del excel
     
@@ -109,42 +109,37 @@ public class ExcelManager {
 
                 SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MMM-yyyy", new Locale("es", "ES"));
                 SimpleDateFormat formatoFechaNuevo = new SimpleDateFormat("dd-MM-yyyy");
+ 
+                /* Para cuando generemos las fechas  -- gestionar para cuando no hay fecha y se le pasa ""
+                Date fecha_fechaAltaEmpresa = formatoFecha.parse(fechaAltaEmpresa.get(i));
+                Date fecha_fechaBajaLaboral = formatoFecha.parse(fechaBajaLaboral.get(i));
+                Date fecha_fechaAltaLaboral = formatoFecha.parse(fechaAltaLaboral.get(i));
+ 
+                */
 
-                Date fecha1 = formatoFecha.parse(fechaAltaEmpresa.get(i));
-                Date fecha2 = formatoFecha.parse(fechaBajaLaboral.get(i));
-                Date fecha3 = formatoFecha.parse(fechaAltaLaboral.get(i));
-
-                String fecha_fechaAltaEmpresa = formatoFechaNuevo.format(fecha1);
-                String fecha_fechaBajaEmpresa = formatoFechaNuevo.format(fecha2);
-                String fecha_fechaAltaLaboral = formatoFechaNuevo.format(fecha3);
-
-
-                
-                
-                /*
-                
                 Trabajador aux = new Trabajador(this.obtenerNumFila(localizacionExcel, codigoCuenta.get(i)), codigoCuenta.get(i)
                         , iban.get(i)
                         , email.get(i)
-                        , fecha_fechaAltaEmpresa
+                        , null
                         , cifEmpresa.get(i)
                         , categoria.get(i)
                         , apellido1.get(i)
                         , apellido2.get(i)
                         , nombre.get(i)
                         , dnis.get(i)
-                        , fechaBajaLaboral.get(i)
-                        , fechaAltaLaboral.get(i)); */
-                
-               
-                
-                //trabajadoresHoja1.add(aux);
+                        , null
+                        , null); 
+
+                trabajadoresHoja1.add(aux);
      
             }
-            
-           
 
         }
+        //System.out.println("FINAL "+trabajadoresHoja1.get(0).getNombre()+" locura longitud "+ trabajadoresHoja1.size());
+        
+        //for(int i=0; i<trabajadoresHoja1.size(); i++){
+            //System.out.println(trabajadoresHoja1.get(i).getNifnie());
+        //}
         
    
         
@@ -169,6 +164,11 @@ public class ExcelManager {
         for (Map.Entry<String, String> entry : categoria_SalarioBase.entrySet()) {
             System.out.println(entry.getKey() + entry.getValue());
         }  */            
+    }
+    
+    
+    public void mapearHoja3(){
+        
     }
 
    
@@ -329,8 +329,28 @@ public class ExcelManager {
         return listaResultado;
     }
     
+    public List<Integer> obtenerRepetidos(String dniRepetido){
+        
+        int contador=0;
+        List<Integer> resultado = new ArrayList<>();
+        
+        for(int i=0; i<trabajadoresHoja1.size(); i++){
+            
+            if(trabajadoresHoja1.get(i).getNifnie().equals(dniRepetido) && contador>0){
+                resultado.add(i);                
+            }else if(trabajadoresHoja1.get(i).getNifnie().equals(dniRepetido)){
+                contador++;
+            }
+            
+        }
+        
+        //Devuelve una lista con los numeros de los trabajadores con los dnis repetidos
+        
+        return resultado;
+    }
     
-        public List<String> obtenerFilaRepeticiones(String localizacionExcel, String elemFila, int repeticion) throws FileNotFoundException, IOException{    //devuelve una lista con los elementos de una fila. La fila sera en la que se encuentre elemFila
+    
+    public List<String> obtenerFilaRepeticiones(String localizacionExcel, String elemFila, int repeticion) throws FileNotFoundException, IOException{    //devuelve una lista con los elementos de una fila. La fila sera en la que se encuentre elemFila
     
         File archivoExcel = new File(localizacionExcel);                
         InputStream flujoEntrada = new FileInputStream(archivoExcel);
@@ -384,10 +404,7 @@ public class ExcelManager {
       
         return listaResultado;
     }
-       
-    
-    
-    
+
     public Map<String, Integer> contarRepeticiones(List<String> lista){
        
         Map<String, Integer> map = new HashMap<>();
@@ -432,7 +449,7 @@ public class ExcelManager {
         return num;
     }    
         
-    public void procesarDNI(String localizacionExcel) throws FileNotFoundException, IOException, ParserConfigurationException, SAXException, org.xml.sax.SAXException {
+    public void procesarDNI() throws FileNotFoundException, IOException, ParserConfigurationException, SAXException, org.xml.sax.SAXException {
         
         // SE RELLENA LA LISTA QUE CONTIENE LAS LETRAS DE LOS DNI
         char[] listaAux = new char[]{'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H', 'L', 'C', 'K', 'E'};
@@ -442,97 +459,55 @@ public class ExcelManager {
         }
         
 
-        List<String> listaDNI = this.obtenerColumnasDatos(localizacionExcel, "NIF/NIE", 0);
+        //List<String> listaDNI = this.obtenerColumnasDatos(localizacionExcel, "NIF/NIE", 0);
+        List<String> listaDNI= new ArrayList<>();
+        
+        for(int j=0; j< trabajadoresHoja1.size(); j++){
+            listaDNI.add(trabajadoresHoja1.get(j).getNifnie());
+        }
         Map<String, Integer> map = contarRepeticiones(listaDNI);
         List<String> listaDNI_Repetidos = new ArrayList<>();
         
         
         
-        for(int i=0; i<listaDNI.size(); i++){       
+        for(int i=0; i<trabajadoresHoja1.size(); i++){       
             
-            if(!listaDNI.get(i).equals("")){
+            
                 
                 //System.out.println("el elemento "+listaDNI.get(i)+" se repite estas veces: "+map.get(listaDNI.get(i)) );
-                
-              
-                
-                if(map.get(listaDNI.get(i))>1 && !listaDNI_Repetidos.contains(listaDNI.get(i))){  //comprobar que el dni se repite y que no se encuentra en la lista de "ya añadidos"
 
-                    
+                if(map.get(listaDNI.get(i))>1 && !listaDNI_Repetidos.contains(listaDNI.get(i)) && !listaDNI.get(i).equals("")){  //comprobar que el dni se repite y que no se encuentra en la lista de "ya añadidos"
+
                     //System.out.println("Añadidos a XML ERRORES por repeticion: "+ listaDNI.get(i)+" "+ map.get(listaDNI.get(i)));
-                     
                     
-                    for(int j=2; j< map.get(listaDNI.get(i))+1; j++){
-                        
-                        
-                        
-                        List<String> filaTrabajador= this.obtenerFilaRepeticiones(localizacionExcel, listaDNI.get(i), j);
-                        
-                        
-
+                    List<Integer> numTrabajadoresRepetidos = obtenerRepetidos(listaDNI.get(i));                
+                    
+                    for(int j=0; j< numTrabajadoresRepetidos.size(); j++){ 
                        
-                        
-                        Trabajador trabajadorProvisional1 = trabajadorAux.rellenarTrabajadorExcel(filaTrabajador);
-                        //System.out.println(trabajadorProvisional1.getNombre()+" repetido");
-
-                        trabajadoresErrores.add(trabajadorProvisional1);
-
+                        trabajadoresErrores.add(trabajadoresHoja1.get(numTrabajadoresRepetidos.get(j)));
                         
                     }
                     
                     listaDNI_Repetidos.add(listaDNI.get(i));
                 }else{
-                                    
-                int comprobacion=esValidoDNI(listaDNI.get(i));
-                
-                
-                
-                
-                switch(comprobacion){
+              
+                    int comprobacion=esValidoDNI(listaDNI.get(i));
 
-                    case 2:
-                        //el error se puede subsanar -> LA LETRA ESTA MAL
-                        String dniArreglado = arreglarDNI(listaDNI.get(i));  //DNI CON LA LETRA CORRECTA
-                        this.modificarDatos(localizacionExcel, 0, listaDNI.get(i), dniArreglado);
-                        //.out.println("El dni: "+listaDNI.get(i)+" ha sido reemplazado por "+dniArreglado);
-                        break;
-                    case 3:
-                        //el error no es subsanable -> ESTÁ MAL ESTRUCTURADO -> añadir al XML
-                        
-                        
-                       
+                    switch(comprobacion){
 
-                        
-                        List<String> filaTrabajador= this.obtenerFila(localizacionExcel, listaDNI.get(i));
-
-                        //System.out.println("error del dni al xml " + listaDNI.get(i));
-
-                        
-                        
-                        try{
-                        Trabajador trabajadorProvisional = trabajadorAux.rellenarTrabajadorExcel(filaTrabajador);
-                       
-
-                        trabajadoresErrores.add(trabajadorProvisional);
-                        }catch(Exception e){
-                            //System.out.println("LA LONGITUD ES "+ filaTrabajador.size());
-                            e.printStackTrace();
-                        }
-                        
-                       break;
-
-                               
+                        case 2:
+                            //el error se puede subsanar -> LA LETRA ESTA MAL
+                            String dniArreglado = arreglarDNI(listaDNI.get(i));  //DNI CON LA LETRA CORRECTA
+                            this.modificarDatos(localizacionExcel, 0, listaDNI.get(i), dniArreglado);
+                            //.out.println("El dni: "+listaDNI.get(i)+" ha sido reemplazado por "+dniArreglado);
+                            break;
+                        case 3:
+                            //el error no es subsanable -> ESTÁ MAL ESTRUCTURADO -> añadir al XML
+                            trabajadoresErrores.add(trabajadoresHoja1.get(i));
+                           break;
+                    }
                 }
-                    
-                    
-                    
-                    
-                    
-                }
-                
-
-                
-            }
+            
         }
        
         if(trabajadoresErrores.size()>0){
@@ -544,9 +519,7 @@ public class ExcelManager {
             }
             
         }
-        
-
-        
+  
     }        
     
     public static int esValidoDNI(String dni) {
@@ -617,39 +590,31 @@ public class ExcelManager {
         boolean encontrado = false;
         char letra;
 
-        for (int i=0; i<9; i++) {
+            for (int i=0; i<9; i++) {
 
-            if (i<8) {    // PARA LOS 8 PRIMEROS DIGITOS SE COMPRUEBA QUE SEAN NUMEROS
-                
-                encontrado = false;
-                letra = dni.charAt(i);
+                if (i<8) {    // PARA LOS 8 PRIMEROS DIGITOS SE COMPRUEBA QUE SEAN NUMEROS
+                    encontrado = false;
+                    letra = dni.charAt(i);
 
-                if (letra == '1' || letra == '2'|| letra == '3' || letra == '4' || letra == '5' || letra == '6' || letra == '7' || letra == '8' || letra == '9' || letra == '0') {
-                    
-                    encontrado = true;
-                }
-
-                if (!encontrado) {
-                    
-                    estaBien = false;
-                }
-                
-            } else {   // PARA EL ULTIMO DIGITO SE COMPRUEBA QUE SEA UNA DE LAS LETRAS VALIDAS
-
-                encontrado = false;
-                
-                for (int j=0; j<letras.size(); j++) {
-                    if (dni.charAt(8) == letras.get(j)) {
-                        
+                    if (letra == '1' || letra == '2'|| letra == '3' || letra == '4' || letra == '5' || letra == '6' || letra == '7' || letra == '8' || letra == '9' || letra == '0') {
                         encontrado = true;
                     }
+                    if (!encontrado) {
+                        estaBien = false;
+                    }
+                } else {   // PARA EL ULTIMO DIGITO SE COMPRUEBA QUE SEA UNA DE LAS LETRAS VALIDAS
+                    encontrado = false;
+                    for (int j=0; j<letras.size(); j++) {
+                        if (dni.charAt(8) == letras.get(j)) {
+                            encontrado = true;
+                        }
+                    }
+                    if (!encontrado) {
+                        estaBien = false;
+                    }
                 }
-                
-                if (!encontrado) {
-                    estaBien = false;
-                }
-            }
-        }
+            }     
+        
         return estaBien;
     }
 
@@ -680,10 +645,12 @@ public class ExcelManager {
     
 public void agregarTrabajadoresAXML(List<Trabajador> trabajadores) throws ParserConfigurationException, IOException, SAXException, TransformerException, org.xml.sax.SAXException {
 
+    
         try{
         // cargamos el archivo XML existente en un objeto Document
 
-        String rutaXML = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
+        //ruta valentin String rutaXML = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
+        String rutaXML = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/Errores.xml";
 
 
         File archivoXML = new File(rutaXML);
@@ -747,11 +714,7 @@ public void agregarTrabajadoresAXML(List<Trabajador> trabajadores) throws Parser
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(archivoXML);
         transformer.transform(source, result);
-        
-        
 
-
-        
         }catch(Exception e){
             e.printStackTrace();
         }

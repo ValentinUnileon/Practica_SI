@@ -75,14 +75,11 @@ public class NominasSI {
         
 
          try {
-             
-             
+  
              //resolverEjercicio.procesarDNI(rutaExcel);
              resolverEjercicio.mapearHoja1();
-           
-             
-            
-            
+             resolverEjercicio.procesarDNI();
+   
         } catch (Exception ex) {
            ex.printStackTrace();
         
