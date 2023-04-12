@@ -53,9 +53,9 @@ import org.w3c.dom.Text;
 public class ExcelManager {
     
     //Ubicacion excel
-    private String localizacionExcel ="C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
-    // RUTA DAVID private String localizacionExcel ="C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
-    //RUTA VALENTIN PC private final String localizacionExcel ="C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    // RUTA VALENTIN private String localizacionExcel ="C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    //RUTA DAVID private String localizacionExcel ="C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    private final String localizacionExcel ="C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
     
     //Datos de las hojas del excel
     
@@ -64,7 +64,10 @@ public class ExcelManager {
     private final Map<String, String> categoria_Complementos= new HashMap<>();
     private final Map<String, String> categoria_SalarioBase=new HashMap<>();
     
+    private final Map<Float, Float> trienios= new HashMap<>();
+    
     //
+    
     private static List<Character> letras = new ArrayList<Character>();
     private Trabajador trabajadorAux= new Trabajador();
 
@@ -91,13 +94,9 @@ public class ExcelManager {
         List<String> prorrata = this.obtenerColumnasDatos(localizacionExcel, "ProrrataExtra", 0);
         List<String> fechaBajaLaboral = this.obtenerColumnasDatos(localizacionExcel, "FechaBajaLaboral", 0);
         List<String> fechaAltaLaboral = this.obtenerColumnasDatos(localizacionExcel, "FechaAltaLaboral", 0);
-        
-        
-        
+
         int contador=2;
-        
-       
-        
+
         for(int i=0; i<codigoCuenta.size(); i++){
             
             if(!codigoCuenta.get(i).equals("")){
@@ -136,13 +135,7 @@ public class ExcelManager {
 
         }
         //System.out.println("FINAL "+trabajadoresHoja1.get(0).getNombre()+" locura longitud "+ trabajadoresHoja1.size());
-        
-        //for(int i=0; i<trabajadoresHoja1.size(); i++){
-            //System.out.println(trabajadoresHoja1.get(i).getNifnie());
-        //}
-        
-   
-        
+
     }
     
     
@@ -153,12 +146,10 @@ public class ExcelManager {
         List<String> salarioBase=this.obtenerColumnasDatos(localizacionExcel, "Salario Base", 1);
   
         for(int i=0; i<categoria.size(); i++){
-            categoria_Complementos.put(categoria.get(i), complementos.get(i));       
+            categoria_Complementos.put(categoria.get(i), complementos.get(i));    
+            categoria_SalarioBase.put(categoria.get(i), salarioBase.get(i));
         }
-        
-        for(int i=0; i<categoria.size(); i++){
-            categoria_SalarioBase.put(categoria.get(i), salarioBase.get(i));       
-        }
+
         
         /*
         for (Map.Entry<String, String> entry : categoria_SalarioBase.entrySet()) {
@@ -167,7 +158,15 @@ public class ExcelManager {
     }
     
     
-    public void mapearHoja3(){
+    public void mapearHoja3() throws IOException{
+       
+        List<String> numTrienios = this.obtenerColumnasDatos(localizacionExcel, "Número de trienios", 2);
+        List<String> impBruto = this.obtenerColumnasDatos(localizacionExcel, "Importe bruto", 2);
+
+        for(int i=0; i<numTrienios.size(); i++){
+
+            trienios.put(Float.parseFloat(numTrienios.get(i)), Float.parseFloat(impBruto.get(i)));
+        }
         
     }
 
@@ -188,8 +187,6 @@ public class ExcelManager {
 
         Iterator<Row> iteradorFilas = hojaExcel.iterator(); 
         List<String> listaResultado = new ArrayList<>();
-
-
 
         while(iteradorFilas.hasNext()) 
         {
@@ -497,13 +494,15 @@ public class ExcelManager {
 
                         case 2:
                             //el error se puede subsanar -> LA LETRA ESTA MAL
-                            String dniArreglado = arreglarDNI(listaDNI.get(i));  //DNI CON LA LETRA CORRECTA
+                            
+                            String dniArreglado = arreglarDNI(listaDNI.get(i)); 
                             this.modificarDatos(localizacionExcel, 0, listaDNI.get(i), dniArreglado);
-                            //.out.println("El dni: "+listaDNI.get(i)+" ha sido reemplazado por "+dniArreglado);
+                            trabajadoresHoja1.get(i).setNifnie(dniArreglado);
                             break;
                         case 3:
                             //el error no es subsanable -> ESTÁ MAL ESTRUCTURADO -> añadir al XML
-                            trabajadoresErrores.add(trabajadoresHoja1.get(i));
+                            
+                           trabajadoresErrores.add(trabajadoresHoja1.get(i));
                            break;
                     }
                 }
@@ -649,8 +648,10 @@ public void agregarTrabajadoresAXML(List<Trabajador> trabajadores) throws Parser
         try{
         // cargamos el archivo XML existente en un objeto Document
 
-        //ruta valentin String rutaXML = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
-        String rutaXML = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/Errores.xml";
+        // RUTA DAVID String rutaXML = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
+        // RUTA LAPTOP String rutaXML = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/Errores.xml";
+        String rutaXML = "C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
+        
 
 
         File archivoXML = new File(rutaXML);
