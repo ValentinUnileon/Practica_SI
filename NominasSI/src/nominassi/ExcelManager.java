@@ -407,11 +407,7 @@ public class ExcelManager {
                         
                     }
                     listaResultado.add(""+num);
-                    
-                    
-                    
-                    
-                    
+
                 }else if(celda.toString().equals(elemFila)){
                     aux= aux-1;
                 }
@@ -419,8 +415,7 @@ public class ExcelManager {
 
         }
 
-        
-      
+       
         return listaResultado;
     }
 
@@ -664,83 +659,170 @@ public class ExcelManager {
     
     
     
-public void agregarTrabajadoresAXML(List<Trabajador> trabajadores) throws ParserConfigurationException, IOException, SAXException, TransformerException, org.xml.sax.SAXException {
-
-    
-        try{
-        // cargamos el archivo XML existente en un objeto Document
-
-        // RUTA DAVID String rutaXML = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
-        // RUTA LAPTOP String rutaXML = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/Errores.xml";
-        String rutaXML = "C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
-        
+    public void agregarTrabajadoresAXML(List<Trabajador> trabajadores) throws ParserConfigurationException, IOException, SAXException, TransformerException, org.xml.sax.SAXException {
 
 
-        File archivoXML = new File(rutaXML);
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        
-        DocumentBuilder db = dbf.newDocumentBuilder();
-       
-        Document doc = db.newDocument();
-        Element rootElement = doc.createElement("Trabajadores");
-        doc.appendChild(rootElement);
+            try{
+            // cargamos el archivo XML existente en un objeto Document
 
-        // obtenemos la raíz del documento existente
-        Element eRaiz = doc.getDocumentElement();
+            // RUTA DAVID String rutaXML = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
+            // RUTA LAPTOP String rutaXML = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/Errores.xml";
+            String rutaXML = "C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
 
-        // creamos un nuevo elemento para cada trabajador
-        for (int i = 0; i < trabajadores.size(); i++) {
 
-            Element xmlTrabajador = doc.createElement("Trabajador");
 
-            
-            Attr atributoID = doc.createAttribute("id");
-            atributoID.setValue(""+trabajadores.get(i).getIdTrabajador());
-            xmlTrabajador.setAttributeNode(atributoID);
-            
-            Element nif = doc.createElement("NIF_NIE");
-            nif.appendChild(doc.createTextNode(trabajadores.get(i).getNifnie()));
-            xmlTrabajador.appendChild(nif);
+            File archivoXML = new File(rutaXML);
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
-            
-            Element nombre = doc.createElement("Nombre");
-            nombre.appendChild(doc.createTextNode(trabajadores.get(i).getNombre()));
-            xmlTrabajador.appendChild(nombre);
-            
-            
+            DocumentBuilder db = dbf.newDocumentBuilder();
 
-            Element apellido1 = doc.createElement("PrimerApellido");
-            apellido1.appendChild(doc.createTextNode(trabajadores.get(i).getApellido1()));
-            xmlTrabajador.appendChild(apellido1);
+            Document doc = db.newDocument();
+            Element rootElement = doc.createElement("Trabajadores");
+            doc.appendChild(rootElement);
 
-            Element apellido2 = doc.createElement("SegundoApellido");
-            apellido2.appendChild(doc.createTextNode(trabajadores.get(i).getApellido2()));
-            xmlTrabajador.appendChild(apellido2);
-            
+            // obtenemos la raíz del documento existente
+            Element eRaiz = doc.getDocumentElement();
 
-            Element empresa = doc.createElement("Empresa");
-            empresa.appendChild(doc.createTextNode(trabajadores.get(i).getEmpresa()));
-            xmlTrabajador.appendChild(empresa);
+            // creamos un nuevo elemento para cada trabajador
+            for (int i = 0; i < trabajadores.size(); i++) {
 
-            Element categoria = doc.createElement("Categoria");
-            categoria.appendChild(doc.createTextNode(trabajadores.get(i).getCategoria()));
-            xmlTrabajador.appendChild(categoria);
+                Element xmlTrabajador = doc.createElement("Trabajador");
 
-            // añadimos el elemento del trabajador a la raíz del documento
-            eRaiz.appendChild(xmlTrabajador);
-        }
 
-        // actualizamos el archivo XML
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes"); // configuramos la propiedad para que se escriba en varias líneas
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(archivoXML);
-        transformer.transform(source, result);
+                Attr atributoID = doc.createAttribute("id");
+                atributoID.setValue(""+trabajadores.get(i).getIdTrabajador());
+                xmlTrabajador.setAttributeNode(atributoID);
 
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+                Element nif = doc.createElement("NIF_NIE");
+                nif.appendChild(doc.createTextNode(trabajadores.get(i).getNifnie()));
+                xmlTrabajador.appendChild(nif);
+
+
+                Element nombre = doc.createElement("Nombre");
+                nombre.appendChild(doc.createTextNode(trabajadores.get(i).getNombre()));
+                xmlTrabajador.appendChild(nombre);
+
+
+
+                Element apellido1 = doc.createElement("PrimerApellido");
+                apellido1.appendChild(doc.createTextNode(trabajadores.get(i).getApellido1()));
+                xmlTrabajador.appendChild(apellido1);
+
+                Element apellido2 = doc.createElement("SegundoApellido");
+                apellido2.appendChild(doc.createTextNode(trabajadores.get(i).getApellido2()));
+                xmlTrabajador.appendChild(apellido2);
+
+
+                Element empresa = doc.createElement("Empresa");
+                empresa.appendChild(doc.createTextNode(trabajadores.get(i).getEmpresa()));
+                xmlTrabajador.appendChild(empresa);
+
+                Element categoria = doc.createElement("Categoria");
+                categoria.appendChild(doc.createTextNode(trabajadores.get(i).getCategoria()));
+                xmlTrabajador.appendChild(categoria);
+
+                // añadimos el elemento del trabajador a la raíz del documento
+                eRaiz.appendChild(xmlTrabajador);
+            }
+
+            // actualizamos el archivo XML
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); // configuramos la propiedad para que se escriba en varias líneas
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(archivoXML);
+            transformer.transform(source, result);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
     }
+    
+    
+    
+    //--------------------------------------------------PRACTICA 3----------------------------------------------------
+    
+    
+    public void escribirCeldaColumna(String nombreColumna, String contenido, int posColumna, int numHoja) throws FileNotFoundException, IOException{   // posicion sin contar nombre de la columna
+        
+        int contadorFilas = 1;
+        int tope = 0; 
+        int bloqueo = 0; 
+        int filaActual = 0; 
+        int celdaActual = 0;
+        posColumna++;
+        
+
+        File archivoExcel = new File(localizacionExcel);                
+        InputStream flujoEntrada = new FileInputStream(archivoExcel);
+        XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
+        XSSFSheet hojaExcel = libroExcel.getSheetAt(numHoja); 
+
+        Iterator<Row> iteradorFilas = hojaExcel.iterator(); 
+        List<String> listaResultado = new ArrayList<>();
+
+        while(iteradorFilas.hasNext()) 
+        {
+            XSSFRow fila = (XSSFRow) iteradorFilas.next();     
+            Iterator<Cell> iteradorCeldas = fila.cellIterator();   
+            
+             posColumna--;
+
+            while(iteradorCeldas.hasNext())
+            {
+                XSSFCell celda = (XSSFCell) iteradorCeldas.next();     
+                if(celda.toString().equals(nombreColumna) && bloqueo == 0)
+                {
+                    System.out.println("FILAS " + contadorFilas);
+                    tope = contadorFilas;
+                    bloqueo = 1;
+                }   
+                
+                if(bloqueo == 1 && filaActual == 1)
+                {
+                    
+                    if(posColumna==0 && celdaActual == 0){
+
+                        fila.getCell(tope-1).setCellValue(contenido);                            
+                        celdaActual = 1;
+   
+                    }
+
+                }
+                
+                contadorFilas++;
+            }
+            filaActual = 1;
+            celdaActual = 0;
+        }
+        
+        flujoEntrada.close();    
+         try{
+            FileOutputStream output_file = new FileOutputStream(new File(localizacionExcel));
+            libroExcel.write(output_file);
+            output_file.close(); 
+            libroExcel.close();
+            
+         } catch (Exception e) {
+
+            e.printStackTrace();
+         }
+      
+    }
+    
+    
+    
+    public void generarGmailTrabajadores(){
+        
+        
+        for(int i=0; i<trabajadoresHoja1.size(); i++){
+            
+        }
+        
+    }
+    
+    
+    
+    
     
 }
