@@ -66,6 +66,10 @@ public class ExcelManager {
     
     private final Map<Float, Float> trienios= new HashMap<>();
     
+    private final Map<Float, Float> retencion = new HashMap<>();
+    
+    private final Map<String, Float> datosEmpresa = new HashMap<>(); 
+    
     //
     
     private static List<Character> letras = new ArrayList<Character>();
@@ -77,7 +81,6 @@ public class ExcelManager {
     
         
     public void mapearHoja1() throws IOException, ParseException{
-        
         
         List<String> paisOrigen = this.obtenerColumnasDatos(localizacionExcel, "Pais Origen Cuenta Bancaria", 0);
         List<String> codigoCuenta = this.obtenerColumnasDatos(localizacionExcel, "CodigoCuenta", 0);
@@ -164,9 +167,28 @@ public class ExcelManager {
         List<String> impBruto = this.obtenerColumnasDatos(localizacionExcel, "Importe bruto", 2);
 
         for(int i=0; i<numTrienios.size(); i++){
-
             trienios.put(Float.parseFloat(numTrienios.get(i)), Float.parseFloat(impBruto.get(i)));
         }
+        
+    }
+    
+    public void mapearHoja4() throws IOException{
+        
+        List<String> brutoAnual = this.obtenerColumnasDatos(localizacionExcel, "Bruto anual", 3);
+        List<String> columnaRetencion = this.obtenerColumnasDatos(localizacionExcel, "Retención", 3);
+        
+        for(int i=0; i<brutoAnual.size(); i++ ){
+            retencion.put(Float.parseFloat(brutoAnual.get(i)), Float.parseFloat(columnaRetencion.get(i)));
+        }
+        
+        List<String> accidentesTrabajo = this.obtenerColumnasDatos(localizacionExcel, "Accidentes trabajo EMPRESARIO", 3);
+        List<String> valores = this.obtenerColumnasDatos(localizacionExcel, "1", 3);
+        
+        for(int j=0; j<accidentesTrabajo.size(); j++ ){
+            datosEmpresa.put(accidentesTrabajo.get(j), Float.parseFloat(valores.get(j)));
+        }
+        
+        System.out.println(datosEmpresa);
         
     }
 
