@@ -44,6 +44,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import org.apache.poi.ss.usermodel.CellType;
 import org.w3c.dom.Text;
 
 /**
@@ -745,6 +746,7 @@ public class ExcelManager {
     
     public void escribirCeldaColumna(String nombreColumna, String contenido, int posColumna, int numHoja) throws FileNotFoundException, IOException{   // posicion sin contar nombre de la columna
         
+       
         int contadorFilas = 1;
         int tope = 0; 
         int bloqueo = 0; 
@@ -798,9 +800,11 @@ public class ExcelManager {
                             celdaActual = 1;                            
                             
                         }else{
-                            fila.createCell(tope-1);
+                            System.out.println("TE PILLA -"+(tope-1));
+                            //fila.createCell(3);
+                            //celda.setCellValue(contenido);
                             fila.getCell(tope-1).setCellValue(contenido); 
-                            System.out.println("TE PILLA");
+                            
                         }
 
                         
