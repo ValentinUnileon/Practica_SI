@@ -817,7 +817,35 @@ public class ExcelManager {
         
         for(int i=0; i<trabajadoresHoja1.size(); i++){
             
+            if(trabajadoresHoja1.get(i).getEmail().equals("")){
+                
+                //generar email y cambiarlo en el trabjador y en el excel//COMPROBAR SI HAY SEGUNDO APELLIDO
+                
+                String correoGenerado = trabajadoresHoja1.get(i).getNombre().charAt(0)+
+                                        trabajadoresHoja1.get(i).getApellido1().charAt(0) + 
+                                        trabajadoresHoja1.get(i).getApellido2().charAt(0) +
+                                        digitoRepeticion(trabajadoresHoja1.get(i)) +
+                                        "@"+ trabajadoresHoja1.get(i).getEmpresa()+".com";
+                                        
+                
+                
+            }
+            
+            
+            
         }
+        
+    }
+    
+    public String digitoRepeticion(Trabajador trabajador){
+        
+        for(int i=0; i<trabajadoresHoja1.size(); i++){
+            
+            if(trabajador.get)
+            
+        }
+        
+        
         
     }
     
