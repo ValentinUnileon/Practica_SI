@@ -53,9 +53,9 @@ import org.w3c.dom.Text;
 public class ExcelManager {
     
     //Ubicacion excel
-    // RUTA VALENTIN private String localizacionExcel ="C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    private String localizacionExcel ="C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
     //RUTA DAVID private String localizacionExcel ="C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
-    private final String localizacionExcel ="C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    // RUTA TORRE private final String localizacionExcel ="C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
     
     //Datos de las hojas del excel
     
@@ -666,8 +666,8 @@ public class ExcelManager {
             // cargamos el archivo XML existente en un objeto Document
 
             // RUTA DAVID String rutaXML = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
-            // RUTA LAPTOP String rutaXML = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/Errores.xml";
-            String rutaXML = "C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
+            String rutaXML = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/Errores.xml";
+            // RUTA TORRE String rutaXML = "C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
 
 
 
@@ -771,6 +771,7 @@ public class ExcelManager {
             while(iteradorCeldas.hasNext())
             {
                 XSSFCell celda = (XSSFCell) iteradorCeldas.next();     
+                
                 if(celda.toString().equals(nombreColumna) && bloqueo == 0)
                 {
                     System.out.println("FILAS " + contadorFilas);
@@ -782,9 +783,40 @@ public class ExcelManager {
                 {
                     
                     if(posColumna==0 && celdaActual == 0){
+                        System.out.println("CONTENIDO " + contenido);
+                        
+                        /*
+                        Iterator<Cell> iteradorCeldasAUX = fila.cellIterator();
+                        XSSFCell celdaAUX = (XSSFCell) iteradorCeldas.next();
+                        celdaAUX.set
+                        celda.setCellValue(contenido);
+                        */
+                        
+                        if(fila.getCell(tope-1)!=null){
+                            
+                            fila.getCell(tope-1).setCellValue(contenido);                            
+                            celdaActual = 1;                            
+                            
+                        }else{
+                            fila.createCell(tope-1);
+                            fila.getCell(tope-1).setCellValue(contenido); 
+                            System.out.println("TE PILLA");
+                        }
 
-                        fila.getCell(tope-1).setCellValue(contenido);                            
-                        celdaActual = 1;
+                        
+                        /*
+                                            XSSFCell celda = (XSSFCell) iteradorCeldas.next();  
+                    //System.out.println("la celda es: "+ celda.toString());
+                    if(celda.toString().equals(antiguaCelda) )                   
+                    {
+                        celda.setCellValue(nuevaCelda);
+                        //System.out.println("la celda es: "+ celda.toString());
+                    }     
+                        */
+                        
+                        
+                        
+                        
    
                     }
 
@@ -812,7 +844,7 @@ public class ExcelManager {
     
     
     
-    public void generarGmailTrabajadores(){
+    public void generarGmailTrabajadores() throws IOException{
         
         
         for(int i=0; i<trabajadoresHoja1.size(); i++){
@@ -821,14 +853,20 @@ public class ExcelManager {
                 
                 //generar email y cambiarlo en el trabjador y en el excel//COMPROBAR SI HAY SEGUNDO APELLIDO
                 
-                String correoGenerado = trabajadoresHoja1.get(i).getNombre().charAt(0)+
-                                        trabajadoresHoja1.get(i).getApellido1().charAt(0) + 
-                                        trabajadoresHoja1.get(i).getApellido2().charAt(0) +
-                                        digitoRepeticion(trabajadoresHoja1.get(i)) +
-                                        "@"+ trabajadoresHoja1.get(i).getEmpresa()+".com";
+                String correoGeneradoCuerpo = trabajadoresHoja1.get(i).getNombre().charAt(0)+
+                                        Character.toString(trabajadoresHoja1.get(i).getApellido1().charAt(0)); 
                                         
                 
+                if(!trabajadoresHoja1.get(i).getApellido2().equals("")){
+                    correoGeneradoCuerpo=correoGeneradoCuerpo+Character.toString(trabajadoresHoja1.get(i).getApellido2().charAt(0));
+                }
                 
+                String correGeneradoDominio= digitoRepeticion(correoGeneradoCuerpo) +
+                                        "@"+ trabajadoresHoja1.get(i).getEmpresa()+".com";
+                
+                //System.out.println(correoGeneradoCuerpo+correGeneradoDominio);
+                
+                this.escribirCeldaColumna("Email", correoGeneradoCuerpo+correGeneradoDominio, i+1, 0);
             }
             
             
@@ -837,16 +875,41 @@ public class ExcelManager {
         
     }
     
-    public String digitoRepeticion(Trabajador trabajador){
+    public String digitoRepeticion(String cuerpo){
+        
+        int contador=0;
         
         for(int i=0; i<trabajadoresHoja1.size(); i++){
             
-            if(trabajador.get)
-            
+            if(!trabajadoresHoja1.get(i).getEmail().equals("")){
+                
+                String cuerpoCorreo = "";
+                boolean parada=false;
+                
+                for(int j=0; j<trabajadoresHoja1.get(i).getEmail().length() && parada==false; j++){
+
+                    if(trabajadoresHoja1.get(i).getEmail().charAt(j)!= '@'){
+                        cuerpoCorreo=cuerpoCorreo+Character.toString(trabajadoresHoja1.get(i).getEmail().charAt(j));
+                    }else{
+                        parada=true;
+                    }                   
+                }
+
+                if(cuerpoCorreo.equals(cuerpo)){
+                    contador++;
+                }                 
+            }       
         }
         
+        String resultado="";
         
+        if(contador<10){
+            resultado="0"+contador;
+        }else{
+            resultado=""+contador;
+        }
         
+        return resultado;
     }
     
     

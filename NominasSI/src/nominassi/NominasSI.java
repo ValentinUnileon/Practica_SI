@@ -81,8 +81,14 @@ public class NominasSI {
              //resolverEjercicio.procesarDNI();
              
              //resolverEjercicio.mapearHoja4();
-             resolverEjercicio.escribirCeldaColumna("CodigoCuenta", "QUE PASOOOOOOOOOOOOOOOOOOOOOOOOO", 1, 0);  // SE LE PASA LA POSICION DE LA COLUMNA SIN CONTAR EL NOMBRE DE LA COLUMNA (DESDE 1 HASTA N)
-   
+             //resolverEjercicio.escribirCeldaColumna("CodigoCuenta", "QUE PASOOOOOOOOOOOOOOOOOOOOOOOOO", 1, 0);  // SE LE PASA LA POSICION DE LA COLUMNA SIN CONTAR EL NOMBRE DE LA COLUMNA (DESDE 1 HASTA N)
+             //resolverEjercicio.generarGmailTrabajadores();
+             
+             resolverEjercicio.escribirCeldaColumna("IBAN","DIABLO LOCO", 10, 0);
+             
+             
+             
+             
         } catch (Exception ex) {
            ex.printStackTrace();
         
