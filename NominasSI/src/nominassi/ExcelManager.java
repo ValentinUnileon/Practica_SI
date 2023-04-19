@@ -54,9 +54,9 @@ import org.w3c.dom.Text;
 public class ExcelManager {
     
     //Ubicacion excel
-    private String localizacionExcel ="C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    // ruta laptop private String localizacionExcel ="C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
     //RUTA DAVID private String localizacionExcel ="C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
-    // RUTA TORRE private final String localizacionExcel ="C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
+    private final String localizacionExcel ="C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/SistemasInformacionII.xlsx";
     
     //Datos de las hojas del excel
     
@@ -668,7 +668,7 @@ public class ExcelManager {
 
             // RUTA DAVID String rutaXML = "C:/Users/w10/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
             String rutaXML = "C:/Users/valen/Documents/git/Practica_SI/NominasSI/src/resources/Errores.xml";
-            // RUTA TORRE String rutaXML = "C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
+            //Ruta valentinString rutaXML = "C:/Users/Torre/Documents/GitHub/Practica_SI/NominasSI/src/resources/Errores.xml";
 
 
 
@@ -753,20 +753,19 @@ public class ExcelManager {
         int filaActual = 0; 
         int celdaActual = 0;
         posColumna++;
-        
 
         File archivoExcel = new File(localizacionExcel);                
         InputStream flujoEntrada = new FileInputStream(archivoExcel);
         XSSFWorkbook libroExcel = new XSSFWorkbook(flujoEntrada); 
         XSSFSheet hojaExcel = libroExcel.getSheetAt(numHoja); 
 
-        Iterator<Row> iteradorFilas = hojaExcel.iterator(); 
-        List<String> listaResultado = new ArrayList<>();
+        Iterator iteradorFilas = hojaExcel.rowIterator();
+        
 
         while(iteradorFilas.hasNext()) 
         {
             XSSFRow fila = (XSSFRow) iteradorFilas.next();     
-            Iterator<Cell> iteradorCeldas = fila.cellIterator();   
+            Iterator iteradorCeldas = fila.cellIterator();   
             
              posColumna--;
 
@@ -786,46 +785,18 @@ public class ExcelManager {
                     
                     if(posColumna==0 && celdaActual == 0){
                         System.out.println("CONTENIDO " + contenido);
-                        
-                        /*
-                        Iterator<Cell> iteradorCeldasAUX = fila.cellIterator();
-                        XSSFCell celdaAUX = (XSSFCell) iteradorCeldas.next();
-                        celdaAUX.set
-                        celda.setCellValue(contenido);
-                        */
-                        
-                        if(fila.getCell(tope-1)!=null){
-                            
+     
+                        if(fila.getCell(tope-1)!=null){                            
                             fila.getCell(tope-1).setCellValue(contenido);                            
                             celdaActual = 1;                            
                             
-                        }else{
-                            System.out.println("TE PILLA -"+(tope-1));
-                            //fila.createCell(3);
-                            //celda.setCellValue(contenido);
-                            fila.getCell(tope-1).setCellValue(contenido); 
-                            
-                        }
-
-                        
-                        /*
-                                            XSSFCell celda = (XSSFCell) iteradorCeldas.next();  
-                    //System.out.println("la celda es: "+ celda.toString());
-                    if(celda.toString().equals(antiguaCelda) )                   
-                    {
-                        celda.setCellValue(nuevaCelda);
-                        //System.out.println("la celda es: "+ celda.toString());
-                    }     
-                        */
-                        
-                        
-                        
-                        
-   
+                        }else{                           
+                            fila.createCell(tope-1);
+                            fila.getCell(tope-1).setCellValue(contenido);
+                            break;
+                        } 
                     }
-
-                }
-                
+                }             
                 contadorFilas++;
             }
             filaActual = 1;
@@ -840,7 +811,6 @@ public class ExcelManager {
             libroExcel.close();
             
          } catch (Exception e) {
-
             e.printStackTrace();
          }
       
@@ -850,7 +820,7 @@ public class ExcelManager {
     
     public void generarGmailTrabajadores() throws IOException{
         
-        
+        System.out.println("que ");
         for(int i=0; i<trabajadoresHoja1.size(); i++){
             
             if(trabajadoresHoja1.get(i).getEmail().equals("")){
@@ -866,9 +836,9 @@ public class ExcelManager {
                 }
                 
                 String correGeneradoDominio= digitoRepeticion(correoGeneradoCuerpo) +
-                                        "@"+ trabajadoresHoja1.get(i).getEmpresa()+".com";
+                                        "@"+ trabajadoresHoja1.get(i).getEmpresa()+"ESTA MAL.com";
                 
-                //System.out.println(correoGeneradoCuerpo+correGeneradoDominio);
+                System.out.println("que "+correoGeneradoCuerpo+correGeneradoDominio);
                 
                 this.escribirCeldaColumna("Email", correoGeneradoCuerpo+correGeneradoDominio, i+1, 0);
             }
